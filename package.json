@@ -1,0 +1,19 @@
+{
+    "name": "@straddleio/bridge",
+    "repository": "https://github.com/straddleio/bridge-client",
+    "workspaces": [
+        "packages/bridge-core",
+        "packages/bridge-js",
+        "packages/bridge-react"
+    ],
+    "scripts": {
+        "build": "bun run build --workspaces"
+    },
+    "prettier": {
+        "trailingComma": "es5",
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": true,
+        "printWidth": 160
+    }
+}
