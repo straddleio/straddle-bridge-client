@@ -1,0 +1,30 @@
+{
+    "name": "@straddleio/bridge-core",
+    "version": "0.1.0",
+    "private": false,
+    "publishConfig": {
+        "access": "public"
+    },
+    "main": "dist/types.js",
+    "types": "dist/types.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "dev": "npm-watch",
+        "publish": "bun run build && bunx --bun npm publish"
+    },
+    "files": [
+        "dist/**/*"
+    ],
+    "devDependencies": {
+        "npm-watch": "^0.13.0",
+        "typescript": "^5"
+    },
+    "watch": {
+        "build": {
+            "patterns": [
+                "src"
+            ],
+            "extensions": "ts,tsx"
+        }
+    }
+}
