@@ -1,4 +1,4 @@
-export declare enum TMessageToJSBridgeType {
+export declare enum EBridgeMessageType {
     PING = "@straddleio/js-bridge/ping",
     ERROR = "@straddleio/js-bridge/error",
     INITIALIZE = "@straddleio/js-bridge/initialize",
