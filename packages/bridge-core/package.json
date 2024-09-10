@@ -1,16 +1,20 @@
 {
     "name": "@straddleio/bridge-core",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "private": false,
     "publishConfig": {
         "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/straddleio/bridge-client.git",
+        "directory": "packages/bridge-core"
     },
     "main": "dist/index.js",
     "types": "dist/types.d.ts",
     "scripts": {
         "build": "tsc",
-        "dev": "npm-watch",
-        "publish": "bun run build && bunx --bun npm publish"
+        "dev": "npm-watch"
     },
     "files": [
         "dist/**/*"

@@ -4,11 +4,11 @@
         "type": "git",
         "url": "git+https://github.com/straddleio/bridge-client.git"
     },
-    "workspaces": [
-        "packages/bridge-core",
-        "packages/bridge-js",
-        "packages/bridge-react"
-    ],
+    "workspaces": {
+        "packages": [
+            "packages/*"
+        ]
+    },
     "scripts": {
         "build": "bun run build --workspaces"
     },
