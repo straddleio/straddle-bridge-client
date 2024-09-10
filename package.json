@@ -1,6 +1,9 @@
 {
     "name": "@straddleio/bridge",
-    "repository": "https://github.com/straddleio/bridge-client",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/straddleio/bridge-client.git"
+    },
     "workspaces": [
         "packages/bridge-core",
         "packages/bridge-js",
@@ -15,5 +18,6 @@
         "semi": false,
         "singleQuote": true,
         "printWidth": 160
-    }
+    },
+    "version": ""
 }
