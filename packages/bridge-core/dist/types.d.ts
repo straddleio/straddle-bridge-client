@@ -5,7 +5,7 @@ export declare enum EBridgeMessageType {
     INITIALIZING = "@straddleio/js-bridge/initializing",
     INITIALIZED = "@straddleio/js-bridge/initialized",
     MOUNTED = "@straddleio/js-bridge/mounted",
-    ON_WALLET_TOKEN = "@straddleio/js-bridge/on-wallet-token",
+    ON_PAYKEY = "@straddleio/js-bridge/on-wallet-token",
     ON_SUCCESS = "@straddleio/js-bridge/on-success",
     ON_SUCCESS_CTA_CLICKED = "@straddleio/js-bridge/on-success-cta-clicked",
     TOKEN = "@straddleio/js-bridge/token",
