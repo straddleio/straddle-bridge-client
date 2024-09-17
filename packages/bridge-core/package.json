@@ -14,7 +14,8 @@
     "types": "dist/types.d.ts",
     "scripts": {
         "build": "tsc",
-        "dev": "npm-watch"
+        "dev": "npm-watch",
+        "publish": "bun run build && bunx --bun npm publish"
     },
     "files": [
         "dist/**/*"

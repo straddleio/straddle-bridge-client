@@ -1,0 +1,41 @@
+{
+    "name": "@straddleio/bridge-react",
+    "version": "0.1.0",
+    "repository": "https://github.com/straddleio/bridge-client",
+    "main": "dist/types.js",
+    "devDependencies": {
+        "@types/node": "^22.5.4",
+        "npm-watch": "^0.13.0",
+        "typescript": "^5"
+    },
+    "type": "module",
+    "peerDependencies": {
+        "@types/react": "^18.3.5",
+        "react": "^18",
+        "react-dom": "^18.3.1"
+    },
+    "files": [
+        "dist/**/*"
+    ],
+    "private": false,
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "build": "rollup -c",
+        "dev": "npm-watch",
+        "publish": "bun run build && bunx --bun npm publish"
+    },
+    "types": "dist/types.d.ts",
+    "watch": {
+        "build": {
+            "patterns": [
+                "src"
+            ],
+            "extensions": "ts,tsx"
+        }
+    },
+    "dependencies": {
+        "@straddleio/bridge-core": "^0.1.2"
+    }
+}
