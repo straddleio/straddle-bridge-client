@@ -6,7 +6,7 @@ export var EBridgeMessageType;
     EBridgeMessageType["INITIALIZING"] = "@straddleio/js-bridge/initializing";
     EBridgeMessageType["INITIALIZED"] = "@straddleio/js-bridge/initialized";
     EBridgeMessageType["MOUNTED"] = "@straddleio/js-bridge/mounted";
-    EBridgeMessageType["ON_WALLET_TOKEN"] = "@straddleio/js-bridge/on-wallet-token";
+    EBridgeMessageType["ON_PAYKEY"] = "@straddleio/js-bridge/on-wallet-token";
     EBridgeMessageType["ON_SUCCESS"] = "@straddleio/js-bridge/on-success";
     EBridgeMessageType["ON_SUCCESS_CTA_CLICKED"] = "@straddleio/js-bridge/on-success-cta-clicked";
     EBridgeMessageType["TOKEN"] = "@straddleio/js-bridge/token";

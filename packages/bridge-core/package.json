@@ -1,6 +1,6 @@
 {
     "name": "@straddleio/bridge-core",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "private": false,
     "publishConfig": {
         "access": "public"
@@ -14,7 +14,8 @@
     "types": "dist/types.d.ts",
     "scripts": {
         "build": "tsc",
-        "dev": "npm-watch"
+        "dev": "npm-watch",
+        "publish": "bun run build && bunx --bun npm publish"
     },
     "files": [
         "dist/**/*"
