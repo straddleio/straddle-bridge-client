@@ -2,7 +2,7 @@
     "name": "@straddleio/bridge",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/straddleio/bridge-client.git"
+        "url": "git+https://github.com/straddleio/straddle-bridge-client.git"
     },
     "workspaces": {
         "packages": [

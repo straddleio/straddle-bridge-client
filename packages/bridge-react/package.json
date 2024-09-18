@@ -1,7 +1,11 @@
 {
     "name": "@straddleio/bridge-react",
     "version": "0.1.0",
-    "repository": "https://github.com/straddleio/bridge-client",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/straddleio/straddle-bridge-client.git",
+        "directory": "packages/bridge-react"
+    },
     "main": "dist/types.js",
     "devDependencies": {
         "@types/node": "^22.5.4",
@@ -36,6 +40,6 @@
         }
     },
     "dependencies": {
-        "@straddleio/bridge-core": "^0.1.2"
+        "@straddleio/bridge-core": "^0.1.3"
     }
 }
