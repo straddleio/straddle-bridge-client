@@ -13,7 +13,7 @@
     },
     "main": "dist/bridge-js.cjs.js",
     "module": "dist/bridge-js.esm.js",
-    "browser": "dist/bridge-js.umd.js",
+    "browser": "dist/bridge-js.umd.bundle.js",
     "devDependencies": {
         "npm-watch": "^0.13.0",
         "@rollup/plugin-commonjs": "^24.0.0",
@@ -29,7 +29,7 @@
     "scripts": {
         "build": "rm -rf ./dist && rollup -c",
         "dev": "npm-watch",
-        "serve": "bun run build && bunx --bunx serve dist -p 3023",
+        "serve": "bun run build && bunx --bunx serve --config ../serve.json dist  -p 3023",
         "publish": "bun run build && bunx --bun npm publish"
     },
     "types": "dist/types.d.ts",
