@@ -1,3 +1,16 @@
+export type TBaseMessage = {
+    type: Exclude<EBridgeMessageType, EBridgeMessageType.DEBUG | EBridgeMessageType.INITIALIZE>;
+    payload?: any;
+};
+export type TMessageInitialize = {
+    type: EBridgeMessageType.INITIALIZE;
+    token: string;
+};
+export type TMessageDebug = {
+    type: EBridgeMessageType.DEBUG;
+    enable: boolean;
+};
+export type TMessage = TBaseMessage | TMessageInitialize | TMessageDebug;
 export declare enum EBridgeMessageType {
     PING = "@straddleio/js-bridge/ping",
     ERROR = "@straddleio/js-bridge/error",

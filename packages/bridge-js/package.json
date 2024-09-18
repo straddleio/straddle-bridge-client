@@ -7,16 +7,25 @@
     },
     "type": "module",
     "repository": "https://github.com/straddleio/bridge-client",
-    "main": "dist/types.js",
+    "main": "dist/bridge-js.cjs.js",
+    "module": "dist/bridge-js.esm.js",
+    "browser": "dist/bridge-js.umd.js",
     "devDependencies": {
-        "npm-watch": "^0.13.0"
+        "npm-watch": "^0.13.0",
+        "@rollup/plugin-commonjs": "^24.0.0",
+        "@rollup/plugin-node-resolve": "^15.0.0",
+        "@rollup/plugin-terser": "^0.4.0",
+        "@rollup/plugin-typescript": "^11.0.0",
+        "rollup": "^3.20.0",
+        "typescript": "^4.9.0"
     },
     "files": [
         "dist/**/*"
     ],
     "scripts": {
-        "build": "rollup -c",
+        "build": "rm -rf ./dist && rollup -c",
         "dev": "npm-watch",
+        "serve": "bun run build && bunx --bunx serve dist -p 3023",
         "publish": "bun run build && bunx --bun npm publish"
     },
     "types": "dist/types.d.ts",
@@ -29,6 +38,6 @@
         }
     },
     "dependencies": {
-        "@straddleio/bridge-core": "^0.1.2"
+        "@straddleio/bridge-core": "^0.1.3"
     }
 }
