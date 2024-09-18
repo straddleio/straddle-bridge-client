@@ -6,7 +6,11 @@
         "access": "public"
     },
     "type": "module",
-    "repository": "https://github.com/straddleio/bridge-client",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/straddleio/bridge-client.git",
+        "directory": "packages/bridge-js"
+    },
     "main": "dist/bridge-js.cjs.js",
     "module": "dist/bridge-js.esm.js",
     "browser": "dist/bridge-js.umd.js",
