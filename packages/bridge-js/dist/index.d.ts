@@ -12,6 +12,7 @@ export declare const straddleBridge: {
         }) => void) | undefined;
         onSuccessCTAClicked?: (() => void) | undefined;
         style: Partial<CSSStyleDeclaration>;
+        className?: string | undefined;
         verbose?: boolean | undefined;
     }) => void;
     getIframe: () => HTMLIFrameElement;
