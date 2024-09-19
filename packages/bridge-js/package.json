@@ -11,8 +11,8 @@
         "url": "git+https://github.com/straddleio/straddle-bridge-client.git",
         "directory": "packages/bridge-js"
     },
-    "main": "dist/bridge-js.cjs.js",
-    "module": "dist/bridge-js.esm.js",
+    "main": "dist/bridge-js.cjs-bundle.js",
+    "module": "dist/bridge-js.esm-bundle.js",
     "browser": "dist/bridge-js.umd.bundle.js",
     "devDependencies": {
         "npm-watch": "^0.13.0",

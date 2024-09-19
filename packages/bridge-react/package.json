@@ -6,10 +6,20 @@
         "url": "git+https://github.com/straddleio/straddle-bridge-client.git",
         "directory": "packages/bridge-react"
     },
-    "main": "dist/types.js",
+    "main": "dist/index.js",
+    "module": "dist/index.esm.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "rollup -c",
+        "dev": "npm-watch",
+        "publish": "bun run build && bunx --bun npm publish"
+    },
     "devDependencies": {
+        "@rollup/plugin-commonjs": "^26.0.1",
+        "@rollup/plugin-terser": "^0.4.4",
         "@types/node": "^22.5.4",
         "npm-watch": "^0.13.0",
+        "rollup-plugin-peer-deps-external": "^2.2.4",
         "typescript": "^5"
     },
     "type": "module",
@@ -25,12 +35,6 @@
     "publishConfig": {
         "access": "public"
     },
-    "scripts": {
-        "build": "rollup -c",
-        "dev": "npm-watch",
-        "publish": "bun run build && bunx --bun npm publish"
-    },
-    "types": "dist/types.d.ts",
     "watch": {
         "build": {
             "patterns": [

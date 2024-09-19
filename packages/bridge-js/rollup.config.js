@@ -10,11 +10,6 @@ export default [
             {
                 file: 'dist/bridge-js.cjs.js',
                 format: 'cjs',
-                output: {
-                    file: 'dist/bridge-js.cjs-bundle.js',
-                    format: 'iife',
-                    name: 'StraddleBridge',
-                },
             },
             {
                 file: 'dist/bridge-js.esm.js',
@@ -29,7 +24,17 @@ export default [
                 },
             },
         ],
-        plugins: [typescript(), resolve(), commonjs(), terser()],
+        plugins: [
+            typescript({
+                compilerOptions: {
+                    moduleResolution: 'node',
+                },
+            }),
+            ,
+            resolve(),
+            commonjs(),
+            terser(),
+        ],
         external: ['@straddleio/bridge-core'],
     },
     {
@@ -37,7 +42,7 @@ export default [
         output: {
             file: 'dist/bridge-js.cjs-bundle.js',
             format: 'iife',
-            name: 'StraddleBridgeDemo',
+            name: 'StraddleBridge',
         },
         plugins: [
             resolve({
@@ -52,7 +57,7 @@ export default [
         output: {
             file: 'dist/bridge-js.esm-bundle.js',
             format: 'iife',
-            name: 'StraddleBridgeDemo',
+            name: 'StraddleBridge',
         },
         plugins: [
             resolve({
@@ -71,7 +76,11 @@ export default [
             sourcemap: true,
         },
         plugins: [
-            typescript(),
+            typescript({
+                compilerOptions: {
+                    moduleResolution: 'node',
+                },
+            }),
             resolve({
                 browser: true,
                 preferBuiltins: false,
@@ -89,6 +98,11 @@ export default [
             sourcemap: true,
         },
         plugins: [
+            typescript({
+                compilerOptions: {
+                    moduleResolution: 'node',
+                },
+            }),
             resolve({
                 browser: true,
                 preferBuiltins: false,
