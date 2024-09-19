@@ -1,7 +1,8 @@
-export type TBaseMessage = {
+export type TBaseMessage<T = any> = {
     type: Exclude<EBridgeMessageType, EBridgeMessageType.DEBUG | EBridgeMessageType.INITIALIZE>
-    payload?: any
+    payload?: T
 }
+export type TPaykeyMessage = TBaseMessage<{ paykey: string }>
 export type TMessageInitialize = {
     type: EBridgeMessageType.INITIALIZE
     token: string
@@ -10,7 +11,7 @@ export type TMessageDebug = {
     type: EBridgeMessageType.DEBUG
     enable: boolean
 }
-export type TMessage = TBaseMessage | TMessageInitialize | TMessageDebug
+export type TMessage = TBaseMessage | TMessageInitialize | TMessageDebug | TPaykeyMessage
 
 export enum EBridgeMessageType {
     PING = '@straddleio/js-bridge/ping',
