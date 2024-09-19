@@ -8,7 +8,7 @@ const straddleBridge = {
     init: function init(params: {
         appUrl: string
         token: string
-        onSuccess?: (payload: any) => void
+        onSuccess?: (payload: { paykey: string }) => void
         onSuccessCTAClicked?: () => void
         onBridgeToken?: () => void
         style: Partial<CSSStyleDeclaration>
