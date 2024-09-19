@@ -1,6 +1,6 @@
 {
     "name": "@straddleio/bridge-js",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "private": false,
     "publishConfig": {
         "access": "public"
@@ -11,9 +11,9 @@
         "url": "git+https://github.com/straddleio/straddle-bridge-client.git",
         "directory": "packages/bridge-js"
     },
-    "main": "dist/bridge-js.cjs.js",
-    "module": "dist/bridge-js.esm.js",
-    "browser": "dist/bridge-js.umd.js",
+    "main": "dist/bridge-js.cjs-bundle.js",
+    "module": "dist/bridge-js.esm-bundle.js",
+    "browser": "dist/bridge-js.umd.bundle.js",
     "devDependencies": {
         "npm-watch": "^0.13.0",
         "@rollup/plugin-commonjs": "^24.0.0",
@@ -29,7 +29,7 @@
     "scripts": {
         "build": "rm -rf ./dist && rollup -c",
         "dev": "npm-watch",
-        "serve": "bun run build && bunx --bunx serve dist -p 3023",
+        "serve": "bun run build && bunx --bunx serve --config ../serve.json dist  -p 3023",
         "publish": "bun run build && bunx --bun npm publish"
     },
     "types": "dist/types.d.ts",

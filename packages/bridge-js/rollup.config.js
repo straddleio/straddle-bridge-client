@@ -18,13 +18,97 @@ export default [
             {
                 file: 'dist/bridge-js.umd.js',
                 format: 'umd',
-                name: 'BridgeJS',
+                name: 'StraddleBridge',
                 globals: {
                     '@straddleio/bridge-core': 'BridgeCore',
                 },
             },
         ],
-        plugins: [typescript(), resolve(), commonjs(), terser()],
+        plugins: [
+            typescript({
+                compilerOptions: {
+                    moduleResolution: 'node',
+                },
+            }),
+            ,
+            resolve(),
+            commonjs(),
+            terser(),
+        ],
         external: ['@straddleio/bridge-core'],
+    },
+    {
+        input: 'dist/bridge-js.cjs.js',
+        output: {
+            file: 'dist/bridge-js.cjs-bundle.js',
+            format: 'iife',
+            name: 'StraddleBridge',
+        },
+        plugins: [
+            resolve({
+                browser: true,
+            }),
+            commonjs(),
+            terser(),
+        ],
+    },
+    {
+        input: 'dist/bridge-js.esm.js',
+        output: {
+            file: 'dist/bridge-js.esm-bundle.js',
+            format: 'iife',
+            name: 'StraddleBridge',
+        },
+        plugins: [
+            resolve({
+                browser: true,
+            }),
+            commonjs(),
+            terser(),
+        ],
+    },
+    {
+        input: 'src/index.ts',
+        output: {
+            file: 'dist/bridge-js.umd.bundle.js',
+            format: 'umd',
+            name: 'StraddleBridge',
+            sourcemap: true,
+        },
+        plugins: [
+            typescript({
+                compilerOptions: {
+                    moduleResolution: 'node',
+                },
+            }),
+            resolve({
+                browser: true,
+                preferBuiltins: false,
+            }),
+            commonjs(),
+            terser(),
+        ],
+    },
+    {
+        input: 'node_modules/@straddleio/bridge-core/dist/index.js',
+        output: {
+            file: 'dist/bridge-core.umd.js',
+            format: 'umd',
+            name: 'BridgeCore',
+            sourcemap: true,
+        },
+        plugins: [
+            typescript({
+                compilerOptions: {
+                    moduleResolution: 'node',
+                },
+            }),
+            resolve({
+                browser: true,
+                preferBuiltins: false,
+            }),
+            commonjs(),
+            terser(),
+        ],
     },
 ]
