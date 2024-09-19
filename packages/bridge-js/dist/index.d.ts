@@ -11,7 +11,6 @@ export declare const straddleBridge: {
             paykey: string;
         }) => void) | undefined;
         onSuccessCTAClicked?: (() => void) | undefined;
-        onBridgeToken?: (() => void) | undefined;
         style: Partial<CSSStyleDeclaration>;
         verbose?: boolean | undefined;
     }) => void;
