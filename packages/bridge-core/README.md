@@ -1,45 +1,23 @@
-# Straddle Bridge Packages
+# `@straddleio/bridge-core`
 
 ## Overview
 
-This repository contains the following packages for integrating Straddle's services:
+`@straddleio/bridge-core` contains shared core utilities and types used by `@straddleio/bridge-js` and `@straddleio/bridge-react`. While it's a public package, it's primarily intended for internal use and not for direct consumption in applications.
 
--   [`@straddleio/bridge-core`](packages/bridge-core): Core utilities and types (not intended for direct use).
--   [`@straddleio/bridge-js`](packages/bridge-js): JavaScript library for non-React applications.
--   [`@straddleio/bridge-react`](packages/bridge-react): React component for seamless integration in React applications.
+## Installation
 
-## Getting Started
+If you need to install this package directly (though it's generally not necessary), you can do so using npm:
 
-Choose the package that best suits your application's needs:
+```bash
+npm install @straddleio/bridge-core
+```
 
--   For **JavaScript applications**, use `@straddleio/bridge-js`.
--   For **React applications**, use `@straddleio/bridge-react`.
+Or using yarn:
 
-Refer to each package's README for detailed installation and usage instructions.
+```bash
+yarn add @straddleio/bridge-core
+```
 
-## Development
+## Note
 
-To contribute to this repository:
-
-1. **Clone the repository:**
-
-    ```bash
-    git clone https://github.com/straddleio/straddle-bridge.git
-    ```
-
-2. **Install dependencies:**
-
-    ```bash
-    cd straddle-bridge
-    npm install
-    ```
-
-3. **Build the packages:**
-
-    ```bash
-    npm run build
-    ```
-
-## License
-
-This project is licensed under the MIT License.
+It's recommended to use either `@straddleio/bridge-js` or `@straddleio/bridge-react` for integrating Straddle's services into your applications.
