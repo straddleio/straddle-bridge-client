@@ -10,11 +10,12 @@ export const straddleBridge = {
         token: string
         onSuccess?: (payload: { paykey: string }) => void
         onSuccessCTAClicked?: () => void
+        targetRef: HTMLElement | undefined
         style: Partial<CSSStyleDeclaration>
         className?: string
         verbose?: boolean
     }) {
-        const { appUrl, token, onSuccess, onSuccessCTAClicked, style, className, verbose = false } = params
+        const { appUrl, token, onSuccess, onSuccessCTAClicked, targetRef, style, className, verbose = false } = params
         straddleBridge.origin = appUrl ?? 'https://dev.straddle.io'
         verbose && console.log('init called')
         const iframe = document.createElement('iframe')
@@ -31,7 +32,7 @@ export const straddleBridge = {
                 iframe.classList.add(className)
             })
         }
-        document.getElementsByTagName('body')[0].appendChild(iframe)
+        ;(targetRef || document.getElementsByTagName('body')[0]).appendChild(iframe)
         typeof window !== 'undefined' &&
             window.addEventListener('message', function (event: MessageEvent<TMessage>) {
                 if (event.origin === straddleBridge.origin) {
