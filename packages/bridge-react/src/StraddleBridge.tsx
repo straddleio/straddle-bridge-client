@@ -2,7 +2,6 @@
 import { EBridgeMessageType } from '@straddleio/bridge-core'
 import { CSSProperties, forwardRef, Ref, useEffect, useState } from 'react'
 
-const DEBUG = false
 const IFRAME_ID = 'Straddle-widget-iframe'
 
 type TMessage = Record<string, any> & { type: EBridgeMessageType }
@@ -28,12 +27,13 @@ type TypeStraddleBridgeProps = {
     token: string
     onSuccess?: (payload: any) => void
     onSuccessCTAClicked?: () => void
+    onClose?: () => void
     className?: string
     style?: CSSProperties
 }
 
-export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps>((props: TypeStraddleBridgeProps, ref: Ref<HTMLElement>) => {
-    const { appUrl, open = true, token, onSuccess, onSuccessCTAClicked, className, style } = props
+export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & { verbose?: boolean }>((props, ref) => {
+    const { appUrl, open = true, token, onSuccess, onSuccessCTAClicked, onClose, className, style, verbose } = props
     const { send, iframeMounted, setIframeMounted, bridgeAppMounted, setBridgeAppMounted, url } = useStraddleBridge({ appUrl })
     useEffect(() => {
         if (open && !iframeMounted) {
@@ -61,7 +61,7 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps>((
             window.addEventListener('message', function (event) {
                 // Make sure the message is from the expected origin
                 if (event.origin === appUrl) {
-                    DEBUG && console.log('Message received from widget:', event.data.type, event)
+                    verbose && console.log('Message received from widget:', event.data.type, event)
                     switch (event.data?.type) {
                         case EBridgeMessageType.PING:
                             break
@@ -70,6 +70,11 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps>((
                                 setBridgeAppMounted(true)
                                 send({ type: EBridgeMessageType.INITIALIZE, token })
                             }
+                            break
+                        case EBridgeMessageType.ON_CLOSE:
+                            onClose?.()
+                            setBridgeAppMounted(false)
+                            document.querySelector(`#${IFRAME_ID}`)?.remove()
                             break
                         case EBridgeMessageType.ON_SUCCESS_CTA_CLICKED:
                             onSuccessCTAClicked?.()
@@ -97,10 +102,10 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps>((
             setIframeMounted(false)
             setBridgeAppMounted(false)
         }
-    }, [open])
+    }, [open, bridgeAppMounted])
     useEffect(() => {
         typeof window !== 'undefined' &&
-            ((window as any).debug = {
+            ((window as any).verbose = {
                 enable: () => send({ type: EBridgeMessageType.DEBUG, enable: true }),
                 disable: () => send({ type: EBridgeMessageType.DEBUG, enable: false }),
             })
