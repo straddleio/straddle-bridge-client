@@ -9,6 +9,7 @@ export var EBridgeMessageType;
     EBridgeMessageType["ON_PAYKEY"] = "@straddleio/js-bridge/on-wallet-token";
     EBridgeMessageType["ON_SUCCESS"] = "@straddleio/js-bridge/on-success";
     EBridgeMessageType["ON_SUCCESS_CTA_CLICKED"] = "@straddleio/js-bridge/on-success-cta-clicked";
+    EBridgeMessageType["ON_CLOSE"] = "@straddleio/js-bridge/on-close";
     EBridgeMessageType["TOKEN"] = "@straddleio/js-bridge/token";
     EBridgeMessageType["DEBUG"] = "@straddleio/js-bridge/debug";
 })(EBridgeMessageType || (EBridgeMessageType = {}));

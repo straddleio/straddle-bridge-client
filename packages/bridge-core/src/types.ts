@@ -23,6 +23,7 @@ export enum EBridgeMessageType {
     ON_PAYKEY = '@straddleio/js-bridge/on-wallet-token',
     ON_SUCCESS = '@straddleio/js-bridge/on-success',
     ON_SUCCESS_CTA_CLICKED = '@straddleio/js-bridge/on-success-cta-clicked',
+    ON_CLOSE = '@straddleio/js-bridge/on-close',
     TOKEN = '@straddleio/js-bridge/token',
     DEBUG = '@straddleio/js-bridge/debug',
 }
