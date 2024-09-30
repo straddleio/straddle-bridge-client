@@ -20,6 +20,9 @@ type TypeStraddleBridgeProps = {
     onSuccess?: (payload: any) => void;
     onSuccessCTAClicked?: () => void;
     onClose?: () => void;
+    onLoadError?: () => void;
+    onManualEntry?: () => void;
+    onRetry?: () => void;
     className?: string;
     style?: CSSProperties;
 };

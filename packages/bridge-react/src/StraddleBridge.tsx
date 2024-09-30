@@ -1,6 +1,6 @@
 'use client'
 import { EBridgeMessageType } from '@straddleio/bridge-core'
-import { CSSProperties, forwardRef, Ref, useEffect, useState } from 'react'
+import { CSSProperties, forwardRef, Ref, useEffect, useRef, useState } from 'react'
 
 const IFRAME_ID = 'Straddle-widget-iframe'
 
@@ -28,18 +28,27 @@ type TypeStraddleBridgeProps = {
     onSuccess?: (payload: any) => void
     onSuccessCTAClicked?: () => void
     onClose?: () => void
+    onLoadError?: () => void
+    onManualEntry?: () => void
+    onRetry?: () => void
     className?: string
     style?: CSSProperties
 }
 
 export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & { verbose?: boolean }>((props, ref) => {
-    const { appUrl, open = true, token, onSuccess, onSuccessCTAClicked, onClose, className, style, verbose } = props
-    const { send, iframeMounted, setIframeMounted, bridgeAppMounted, setBridgeAppMounted, url } = useStraddleBridge({ appUrl })
+    const { appUrl, open = true, token, onSuccess, onSuccessCTAClicked, onClose, onLoadError, className, style, verbose } = props
+    const { send, setIframeMounted, bridgeAppMounted, setBridgeAppMounted, url } = useStraddleBridge({ appUrl })
+    const iframeMounted = useRef(false)
     useEffect(() => {
-        if (open && !iframeMounted) {
-            setIframeMounted(true)
+        if (open && !iframeMounted.current) {
+            iframeMounted.current = true
             const iframe = document.createElement('iframe')
             iframe.setAttribute('src', url)
+            iframe.setAttribute('src', url)
+            iframe.addEventListener('error', () => {
+                console.error('Error loading Straddle iframe')
+                onLoadError?.()
+            })
             iframe.id = IFRAME_ID
             let iframe_style = style
             if (!style) {
@@ -52,16 +61,21 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
                     iframe.classList.add(className)
                 })
             }
-            if (ref && 'current' in ref) {
+            if (ref && 'current' in ref && ref.current && ref.current instanceof Node) {
                 ;(ref.current as HTMLElement).appendChild(iframe)
             } else {
+                if (ref && 'current' in ref && (!ref.current || !(ref.current instanceof Node))) {
+                    console.warn('ref passed to StraddleBridge is not a valid ref, reverting to appening to body. Ref passed:', ref.current)
+                }
                 document.getElementsByTagName('body')[0].appendChild(iframe)
             }
 
             window.addEventListener('message', function (event) {
                 // Make sure the message is from the expected origin
                 if (event.origin === appUrl) {
-                    verbose && console.log('Message received from widget:', event.data.type, event)
+                    verbose &&
+                        event.data.type !== '@straddleio/bridge-js/log' &&
+                        console.log('Straddle Bridge React client, Message received from widget:', event.data.type, event)
                     switch (event.data?.type) {
                         case EBridgeMessageType.PING:
                             break
@@ -100,6 +114,7 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
         } else if (!open && iframeMounted) {
             document.querySelector(`#${IFRAME_ID}`)?.remove()
             setIframeMounted(false)
+            iframeMounted.current = false
             setBridgeAppMounted(false)
         }
     }, [open, bridgeAppMounted])

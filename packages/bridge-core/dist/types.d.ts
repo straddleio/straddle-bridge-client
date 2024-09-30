@@ -25,6 +25,8 @@ export declare enum EBridgeMessageType {
     ON_SUCCESS = "@straddleio/js-bridge/on-success",
     ON_SUCCESS_CTA_CLICKED = "@straddleio/js-bridge/on-success-cta-clicked",
     ON_CLOSE = "@straddleio/js-bridge/on-close",
+    ON_MANUAL_ENTRY = "@straddleio/js-bridge/on-manual-entry",
+    ON_RETRY = "@straddleio/js-bridge/on-retry",
     TOKEN = "@straddleio/js-bridge/token",
     DEBUG = "@straddleio/js-bridge/debug"
 }

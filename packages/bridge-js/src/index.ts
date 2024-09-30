@@ -10,6 +10,9 @@ export const straddleBridge = {
         token: string
         onSuccess?: (payload: { paykey: string }) => void
         onSuccessCTAClicked?: () => void
+        onLoadError?: () => void
+        onManualEntry?: () => void
+        onRetry?: () => void
         targetRef: HTMLElement | undefined
         style: Partial<CSSStyleDeclaration>
         className?: string
