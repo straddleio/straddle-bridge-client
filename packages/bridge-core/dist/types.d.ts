@@ -1,7 +1,10 @@
-export type TBaseMessage = {
+export type TBaseMessage<T = any> = {
     type: Exclude<EBridgeMessageType, EBridgeMessageType.DEBUG | EBridgeMessageType.INITIALIZE>;
-    payload?: any;
+    payload?: T;
 };
+export type TPaykeyMessage = TBaseMessage<{
+    paykey: string;
+}>;
 export type TMessageInitialize = {
     type: EBridgeMessageType.INITIALIZE;
     token: string;
@@ -10,7 +13,7 @@ export type TMessageDebug = {
     type: EBridgeMessageType.DEBUG;
     enable: boolean;
 };
-export type TMessage = TBaseMessage | TMessageInitialize | TMessageDebug;
+export type TMessage = TBaseMessage | TMessageInitialize | TMessageDebug | TPaykeyMessage;
 export declare enum EBridgeMessageType {
     PING = "@straddleio/js-bridge/ping",
     ERROR = "@straddleio/js-bridge/error",
@@ -21,6 +24,9 @@ export declare enum EBridgeMessageType {
     ON_PAYKEY = "@straddleio/js-bridge/on-wallet-token",
     ON_SUCCESS = "@straddleio/js-bridge/on-success",
     ON_SUCCESS_CTA_CLICKED = "@straddleio/js-bridge/on-success-cta-clicked",
+    ON_CLOSE = "@straddleio/js-bridge/on-close",
+    ON_MANUAL_ENTRY = "@straddleio/js-bridge/on-manual-entry",
+    ON_RETRY = "@straddleio/js-bridge/on-retry",
     TOKEN = "@straddleio/js-bridge/token",
     DEBUG = "@straddleio/js-bridge/debug"
 }

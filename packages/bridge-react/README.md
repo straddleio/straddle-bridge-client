@@ -40,6 +40,14 @@ const StraddleBridgeController = () => {
         setOpen(false)
     }
 
+    const handleClose = () => {
+        console.log('Straddle widget closed')
+    }
+
+    const handleLoadError = () => {
+        console.error('Error loading Straddle iframe')
+    }
+
     return (
         <div>
             <button onClick={() => setOpen(true)}>Open Straddle Widget</button>
@@ -49,6 +57,8 @@ const StraddleBridgeController = () => {
                     token={token}
                     onSuccess={handleSuccess}
                     onSuccessCTAClicked={handleSuccessCTAClicked}
+                    onClose={handleClose}
+                    onLoadError={handleLoadError}
                     style={{
                         position: 'fixed',
                         width: '100%',
@@ -73,9 +83,14 @@ export default StraddleBridgeController
 -   **open**: Boolean indicating whether the Straddle widget should be displayed.
 -   **onSuccess**: Callback function invoked when the operation is successful.
 -   **onSuccessCTAClicked**: Callback function invoked when the CTA (Call to Action) button is clicked.
+-   **onClose**: Callback function invoked when the Straddle widget is closed.
+-   **onLoadError**: Callback function invoked when there's an error loading the Straddle iframe.
+-   **onManualEntry**: Callback function invoked when the user clicks the manual entry button.
+-   **onRetry**: Callback function invoked when the user clicks the retry button.
+-   **onPaykey**: Callback function invoked when a paykey event occurs.
+-   **ref**: (Optional) Ref to attach the iframe to a specific DOM element. If not passed, the iframe will be appended to the body.
 -   **style**: (Optional) Custom styles for the iframe containing the Straddle widget. If passed, it should be an object with CSS properties, and will replace any default style. If not passed, the widget will fill the whole screen.
 -   **className**: (Optional) Custom class names for styling the iframe. This will not replace the default styling, if you want no style to be applied you must pass an empty object as style.
--   **ref**: (Optional) Ref to attach the iframe to a specific DOM element.
 
 ## API Reference
 

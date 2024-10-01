@@ -19,9 +19,15 @@ type TypeStraddleBridgeProps = {
     token: string;
     onSuccess?: (payload: any) => void;
     onSuccessCTAClicked?: () => void;
+    onClose?: () => void;
+    onLoadError?: () => void;
+    onManualEntry?: () => void;
+    onRetry?: () => void;
     className?: string;
     style?: CSSProperties;
 };
-export declare const StraddleBridge: import("react").ForwardRefExoticComponent<TypeStraddleBridgeProps & import("react").RefAttributes<HTMLElement>>;
+export declare const StraddleBridge: import("react").ForwardRefExoticComponent<TypeStraddleBridgeProps & {
+    verbose?: boolean;
+} & import("react").RefAttributes<HTMLElement>>;
 export {};
 //# sourceMappingURL=StraddleBridge.d.ts.map

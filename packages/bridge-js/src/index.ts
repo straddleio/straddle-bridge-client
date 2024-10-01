@@ -10,6 +10,9 @@ export const straddleBridge = {
         token: string
         onSuccess?: (payload: { paykey: string }) => void
         onSuccessCTAClicked?: () => void
+        onLoadError?: () => void
+        onManualEntry?: () => void
+        onRetry?: () => void
         targetRef: HTMLElement | undefined
         style: Partial<CSSStyleDeclaration>
         className?: string
@@ -34,26 +37,42 @@ export const straddleBridge = {
         }
         ;(targetRef || document.getElementsByTagName('body')[0]).appendChild(iframe)
         typeof window !== 'undefined' &&
-            window.addEventListener('message', function (event: MessageEvent<TMessage>) {
-                if (event.origin === straddleBridge.origin) {
-                    verbose && console.log('Message received from widget:', event.data.type, event)
-                    switch (event.data?.type) {
-                        case EBridgeMessageType.MOUNTED:
-                            if (!straddleBridge.mounted) {
-                                straddleBridge.mounted = true
-                                straddleBridge.send({ type: EBridgeMessageType.INITIALIZE, token })
-                            }
-                            break
-                        case EBridgeMessageType.ON_SUCCESS_CTA_CLICKED:
-                            document.getElementsByTagName('body')[0].removeChild(iframe)
-                            onSuccessCTAClicked?.()
-                            break
-                        case EBridgeMessageType.ON_PAYKEY:
-                            onSuccess?.(event.data as any)
-                            break
+            window.addEventListener(
+                'message',
+                function (event: MessageEvent<TMessage | { type: '@straddleio/bridge-js/console'; method: string; payload: any[] }>) {
+                    if (event.origin === straddleBridge.origin) {
+                        verbose && console.log('Message received from widget:', event.data.type, event)
+                        switch (event.data?.type) {
+                            case EBridgeMessageType.MOUNTED:
+                                if (!straddleBridge.mounted) {
+                                    straddleBridge.mounted = true
+                                    straddleBridge.send({ type: EBridgeMessageType.INITIALIZE, token })
+                                }
+                                break
+                            case EBridgeMessageType.ON_SUCCESS_CTA_CLICKED:
+                                document.getElementsByTagName('body')[0].removeChild(iframe)
+                                onSuccessCTAClicked?.()
+                                break
+                            case EBridgeMessageType.ON_PAYKEY:
+                                onSuccess?.(event.data as any)
+                                break
+                            case '@straddleio/bridge-js/console':
+                                alert(event.data.method)
+                                {
+                                    const parsedPayload: any = event.data.payload.map((item: any) => {
+                                        try {
+                                            return JSON.parse(item)
+                                        } catch {
+                                            return item
+                                        }
+                                    })
+                                    ;(console[event.data.method as keyof typeof console] as Function).apply(console, parsedPayload)
+                                }
+                                break
+                        }
                     }
                 }
-            })
+            )
     },
     getIframe: () => document.getElementById('Straddle-widget-iframe') as HTMLIFrameElement,
     show: () => {
