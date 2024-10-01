@@ -70,47 +70,50 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
                 document.getElementsByTagName('body')[0].appendChild(iframe)
             }
 
-            window.addEventListener('message', function (event) {
-                // Make sure the message is from the expected origin
-                if (event.origin === appUrl) {
-                    verbose &&
-                        event.data.type !== '@straddleio/bridge-js/log' &&
-                        console.log('Straddle Bridge React client, Message received from widget:', event.data.type, event)
-                    switch (event.data?.type) {
-                        case EBridgeMessageType.PING:
-                            break
-                        case EBridgeMessageType.MOUNTED:
-                            if (!bridgeAppMounted) {
-                                setBridgeAppMounted(true)
-                                send({ type: EBridgeMessageType.INITIALIZE, token })
-                            }
-                            break
-                        case EBridgeMessageType.ON_CLOSE:
-                            onClose?.()
-                            setBridgeAppMounted(false)
-                            document.querySelector(`#${IFRAME_ID}`)?.remove()
-                            break
-                        case EBridgeMessageType.ON_SUCCESS_CTA_CLICKED:
-                            onSuccessCTAClicked?.()
-                            break
-                        case EBridgeMessageType.ON_PAYKEY:
-                            onSuccess?.(event.data)
-                            break
-                        case '@straddleio/bridge-js/log':
-                            {
-                                const parsedPayload: any = event.data.payload.map((item: any) => {
-                                    try {
-                                        return JSON.parse(item)
-                                    } catch {
-                                        return item
-                                    }
-                                })
-                                ;(console[event.data.method as keyof typeof console] as Function).apply(console, parsedPayload)
-                            }
-                            break
+            window.addEventListener(
+                'message',
+                function (event: MessageEvent<TMessage | { type: '@straddleio/bridge-js/console'; method: string; payload: any[] }>) {
+                    // Make sure the message is from the expected origin
+                    if (event.origin === appUrl) {
+                        verbose &&
+                            event.data.type !== '@straddleio/bridge-js/console' &&
+                            console.log('Straddle Bridge React client, Message received from widget:', event.data.type, event)
+                        switch (event.data?.type) {
+                            case EBridgeMessageType.PING:
+                                break
+                            case EBridgeMessageType.MOUNTED:
+                                if (!bridgeAppMounted) {
+                                    setBridgeAppMounted(true)
+                                    send({ type: EBridgeMessageType.INITIALIZE, token })
+                                }
+                                break
+                            case EBridgeMessageType.ON_CLOSE:
+                                onClose?.()
+                                setBridgeAppMounted(false)
+                                document.querySelector(`#${IFRAME_ID}`)?.remove()
+                                break
+                            case EBridgeMessageType.ON_SUCCESS_CTA_CLICKED:
+                                onSuccessCTAClicked?.()
+                                break
+                            case EBridgeMessageType.ON_PAYKEY:
+                                onSuccess?.(event.data)
+                                break
+                            case '@straddleio/bridge-js/console':
+                                {
+                                    const parsedPayload: any = event.data.payload.map((item: any) => {
+                                        try {
+                                            return JSON.parse(item)
+                                        } catch {
+                                            return item
+                                        }
+                                    })
+                                    ;(console[event.data.method as keyof typeof console] as Function).apply(console, parsedPayload)
+                                }
+                                break
+                        }
                     }
                 }
-            })
+            )
         } else if (!open && iframeMounted) {
             document.querySelector(`#${IFRAME_ID}`)?.remove()
             setIframeMounted(false)
