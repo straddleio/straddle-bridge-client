@@ -11,6 +11,10 @@ export declare const straddleBridge: {
             paykey: string;
         }) => void) | undefined;
         onSuccessCTAClicked?: (() => void) | undefined;
+        onLoadError?: (() => void) | undefined;
+        onManualEntry?: (() => void) | undefined;
+        onRetry?: (() => void) | undefined;
+        targetRef: HTMLElement | undefined;
         style: Partial<CSSStyleDeclaration>;
         className?: string | undefined;
         verbose?: boolean | undefined;
