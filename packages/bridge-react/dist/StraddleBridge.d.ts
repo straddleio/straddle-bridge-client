@@ -1,8 +1,5 @@
-import { EBridgeMessageType } from '@straddleio/bridge-core';
+import { TMessage } from '@straddleio/bridge-core';
 import { CSSProperties } from 'react';
-type TMessage = Record<string, any> & {
-    type: EBridgeMessageType;
-};
 export declare const useStraddleBridge: ({ appUrl }: {
     appUrl: string;
 }) => {
@@ -17,7 +14,9 @@ type TypeStraddleBridgeProps = {
     appUrl: string;
     open?: boolean;
     token: string;
-    onSuccess?: (payload: any) => void;
+    onSuccess?: (payload: {
+        paykey: string;
+    }) => void;
     onSuccessCTAClicked?: () => void;
     onClose?: () => void;
     onLoadError?: () => void;
