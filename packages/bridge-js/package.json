@@ -1,6 +1,6 @@
 {
     "name": "@straddleio/bridge-js",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "private": false,
     "publishConfig": {
         "access": "public"
@@ -42,6 +42,6 @@
         }
     },
     "dependencies": {
-        "@straddleio/bridge-core": "^0.1.5"
+        "@straddleio/bridge-core": "workspace:*"
     }
 }
