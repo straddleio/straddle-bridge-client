@@ -44,6 +44,6 @@
         }
     },
     "dependencies": {
-        "@straddleio/bridge-core": "^0.1.3"
+        "@straddleio/bridge-core": "^0.1.5"
     }
 }
