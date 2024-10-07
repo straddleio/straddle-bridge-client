@@ -1,5 +1,5 @@
 'use client'
-import { EBridgeMessageType, TMessage } from '@straddleio/bridge-core'
+import { EBridgeMessageType, TMessage, TPaykeyResponse } from '@straddleio/bridge-core'
 import { CSSProperties, forwardRef, Ref, useEffect, useRef, useState } from 'react'
 
 const IFRAME_ID = 'Straddle-widget-iframe'
@@ -7,7 +7,7 @@ const IFRAME_ID = 'Straddle-widget-iframe'
 export const useStraddleBridge = ({ appUrl }: { appUrl: string }) => {
     const [iframeMounted, setIframeMounted] = useState(false)
     const [bridgeAppMounted, setBridgeAppMounted] = useState(false)
-
+    console.log({ bridgeAppMounted })
     const parentOrigin = getParentOrigin()
     const url = `${appUrl}/${parentOrigin}/`
     const send = (message: TMessage) => {
@@ -24,10 +24,10 @@ type TypeStraddleBridgeProps = {
     appUrl: string
     open?: boolean
     token: string
-    onSuccess?: (payload: { paykey: string }) => void
+    onSuccess?: (payload: TPaykeyResponse) => void
     onSuccessCTAClicked?: () => void
     onClose?: () => void
-    onLoadError?: () => void
+    onLoadError?: (err: ErrorEvent) => void
     onManualEntry?: () => void
     onRetry?: () => void
     className?: string
@@ -35,7 +35,7 @@ type TypeStraddleBridgeProps = {
 }
 
 export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & { verbose?: boolean }>((props, ref) => {
-    const { appUrl, open = true, token, onSuccess, onSuccessCTAClicked, onClose, onLoadError, className, style, verbose } = props
+    const { appUrl, open = true, token, onSuccess, onSuccessCTAClicked, onClose, onLoadError, onManualEntry, onRetry, className, style, verbose } = props
     const { send, setIframeMounted, bridgeAppMounted, setBridgeAppMounted, url } = useStraddleBridge({ appUrl })
     const iframeMounted = useRef(false)
     useEffect(() => {
@@ -43,10 +43,9 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
             iframeMounted.current = true
             const iframe = document.createElement('iframe')
             iframe.setAttribute('src', url)
-            iframe.setAttribute('src', url)
-            iframe.addEventListener('error', () => {
-                console.error('Error loading Straddle iframe')
-                onLoadError?.()
+            iframe.addEventListener('error', (errorEvent) => {
+                console.error('Error loading Straddle Widget')
+                onLoadError?.(errorEvent)
             })
             iframe.id = IFRAME_ID
             let iframe_style = style
@@ -80,10 +79,8 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
                         case EBridgeMessageType.PING:
                             break
                         case EBridgeMessageType.MOUNTED:
-                            if (!bridgeAppMounted) {
-                                setBridgeAppMounted(true)
-                                send({ type: EBridgeMessageType.INITIALIZE, token })
-                            }
+                            setBridgeAppMounted(true)
+                            send({ type: EBridgeMessageType.INITIALIZE, token })
                             break
                         case EBridgeMessageType.ON_CLOSE:
                             onClose?.()
@@ -94,7 +91,13 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
                             onSuccessCTAClicked?.()
                             break
                         case EBridgeMessageType.ON_PAYKEY:
-                            onSuccess?.({ paykey: message.paykey })
+                            onSuccess?.(message.paykeyResponse)
+                            break
+                        case EBridgeMessageType.ON_MANUAL_ENTRY:
+                            onManualEntry?.()
+                            break
+                        case EBridgeMessageType.ON_RETRY:
+                            onRetry?.()
                             break
                         case EBridgeMessageType.CONSOLE:
                             {

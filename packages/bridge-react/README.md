@@ -31,8 +31,8 @@ const StraddleBridgeController = () => {
     const token = 'your-authentication-token' // replace with your token
     const appUrl = '' // replace with your real URL
 
-    const handleSuccess = ({ paykey: string }) => {
-        console.log('Success event, paykey is:', paykey)
+    const handleSuccess = (data: TPaykeyResponse) => {
+        console.log('Success event, paykey data is:', data)
     }
 
     const handleSuccessCTAClicked = () => {
@@ -44,8 +44,8 @@ const StraddleBridgeController = () => {
         console.log('Straddle widget closed')
     }
 
-    const handleLoadError = () => {
-        console.error('Error loading Straddle iframe')
+    const handleLoadError = (error: any) => {
+        console.error('Error loading Straddle Bridge Widget', error)
     }
 
     return (

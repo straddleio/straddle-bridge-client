@@ -1,4 +1,4 @@
-import { TMessage } from '@straddleio/bridge-core';
+import { TMessage, TPaykeyResponse } from '@straddleio/bridge-core';
 import { CSSProperties } from 'react';
 export declare const useStraddleBridge: ({ appUrl }: {
     appUrl: string;
@@ -14,12 +14,10 @@ type TypeStraddleBridgeProps = {
     appUrl: string;
     open?: boolean;
     token: string;
-    onSuccess?: (payload: {
-        paykey: string;
-    }) => void;
+    onSuccess?: (payload: TPaykeyResponse) => void;
     onSuccessCTAClicked?: () => void;
     onClose?: () => void;
-    onLoadError?: () => void;
+    onLoadError?: (err: ErrorEvent) => void;
     onManualEntry?: () => void;
     onRetry?: () => void;
     className?: string;
