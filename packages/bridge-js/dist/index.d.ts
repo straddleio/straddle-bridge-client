@@ -1,4 +1,4 @@
-import { TMessage } from '@straddleio/bridge-core';
+import { TMessage, TPaykeyResponse } from '@straddleio/bridge-core';
 export declare const straddleBridge: {
     getUrl: () => string;
     origin: string;
@@ -7,11 +7,10 @@ export declare const straddleBridge: {
     init: (params: {
         appUrl: string;
         token: string;
-        onSuccess?: ((payload: {
-            paykey: string;
-        }) => void) | undefined;
+        onSuccess?: ((payload: TPaykeyResponse) => void) | undefined;
         onSuccessCTAClicked?: (() => void) | undefined;
-        onLoadError?: (() => void) | undefined;
+        onClose?: (() => void) | undefined;
+        onLoadError?: ((err: ErrorEvent) => void) | undefined;
         onManualEntry?: (() => void) | undefined;
         onRetry?: (() => void) | undefined;
         targetRef: HTMLElement | undefined;

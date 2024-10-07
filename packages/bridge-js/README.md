@@ -29,13 +29,22 @@ straddleBridge.init({
     appUrl: '', // replace with the actual URL
     token: 'your-authentication-token', // replace with your token
     onSuccess: (payload) => {
-        console.log('Success event:', payload)
+        console.log('Success event, paykey data is:', data)
     },
     onSuccessCTAClicked: () => {
         console.log('Success CTA clicked')
     },
-    onPaykey: (payload) => {
-        console.log('Paykey event:', payload)
+    onClose: () => {
+        console.log('Straddle widget closed')
+    },
+    onLoadError: (error) => {
+        console.error('Error loading Straddle Bridge Widget', error)
+    },
+    onManualEntry: () => {
+        console.log('Manual entry event')
+    },
+    onRetry: () => {
+        console.log('Retry event')
     },
     style: {
         position: 'absolute',

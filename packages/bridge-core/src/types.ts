@@ -2,7 +2,7 @@ export type TBaseMessage<T = any> = {
     type: Exclude<EBridgeMessageType, EBridgeMessageType.DEBUG | EBridgeMessageType.INITIALIZE | EBridgeMessageType.ON_PAYKEY>
     payload?: T
 }
-export type TPaykeyMessage = { type: EBridgeMessageType.ON_PAYKEY; paykey: string }
+export type TPaykeyMessage = { type: EBridgeMessageType.ON_PAYKEY; paykeyResponse: TPaykeyResponse }
 export type TMessageInitialize = {
     type: EBridgeMessageType.INITIALIZE
     token: string
@@ -15,6 +15,27 @@ export type TMessageConsole = {
     type: EBridgeMessageType.CONSOLE
     method: keyof typeof console
     payload: any
+}
+
+export type TPaykeyResponse = {
+    meta: { api_request_id: string; api_request_timestamp: string }
+    data: {
+        bank_data: {
+            routing_number: string
+            account_number: string
+            account_type: string
+        }
+        created_at: string
+        customer_id: string
+        id: string
+        institution_name: string
+        label: string
+        paykey: string
+        source: string
+        status: string
+        updated_at: string
+    }
+    response_type: 'object'
 }
 export type TMessage = TBaseMessage | TMessageInitialize | TPaykeyMessage | TMessageDebug | TMessageConsole
 

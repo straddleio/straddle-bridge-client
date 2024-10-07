@@ -1,4 +1,6 @@
-import { EBridgeMessageType, TMessage } from '@straddleio/bridge-core'
+import { EBridgeMessageType, TMessage, TPaykeyResponse } from '@straddleio/bridge-core'
+
+const IFRAME_ID = 'Straddle-widget-iframe'
 
 export const straddleBridge = {
     getUrl: () => `${straddleBridge.origin}/${encodeURIComponent(typeof window !== 'undefined' && window.location.origin)}/`,
@@ -8,9 +10,10 @@ export const straddleBridge = {
     init: function init(params: {
         appUrl: string
         token: string
-        onSuccess?: (payload: { paykey: string }) => void
+        onSuccess?: (payload: TPaykeyResponse) => void
         onSuccessCTAClicked?: () => void
-        onLoadError?: () => void
+        onClose?: () => void
+        onLoadError?: (err: ErrorEvent) => void
         onManualEntry?: () => void
         onRetry?: () => void
         targetRef: HTMLElement | undefined
@@ -18,12 +21,29 @@ export const straddleBridge = {
         className?: string
         verbose?: boolean
     }) {
-        const { appUrl, token, onSuccess, onSuccessCTAClicked, targetRef, style, className, verbose = false } = params
+        const {
+            appUrl,
+            token,
+            onSuccess,
+            onSuccessCTAClicked,
+            onClose,
+            onLoadError,
+            onManualEntry,
+            onRetry,
+            targetRef,
+            style,
+            className,
+            verbose = false,
+        } = params
         straddleBridge.origin = appUrl ?? 'https://dev.straddle.io'
         verbose && console.log('init called')
         const iframe = document.createElement('iframe')
         iframe.setAttribute('src', straddleBridge.getUrl())
-        iframe.id = 'Straddle-widget-iframe'
+        iframe.addEventListener('error', (errorEvent) => {
+            console.error('Error loading Straddle Widget')
+            onLoadError?.(errorEvent)
+        })
+        iframe.id = IFRAME_ID
         let iframe_style = style
         if (!style) {
             iframe_style = { position: 'fixed', width: '100%', height: '100%', top: '0%', left: '0', zIndex: '2147483647' }
@@ -37,42 +57,49 @@ export const straddleBridge = {
         }
         ;(targetRef || document.getElementsByTagName('body')[0]).appendChild(iframe)
         typeof window !== 'undefined' &&
-            window.addEventListener(
-                'message',
-                function (event: MessageEvent<TMessage | { type: '@straddleio/bridge-js/console'; method: string; payload: any[] }>) {
-                    if (event.origin === straddleBridge.origin) {
-                        verbose && console.log('Message received from widget:', event.data.type, event)
-                        switch (event.data?.type) {
-                            case EBridgeMessageType.MOUNTED:
-                                if (!straddleBridge.mounted) {
-                                    straddleBridge.mounted = true
-                                    straddleBridge.send({ type: EBridgeMessageType.INITIALIZE, token })
-                                }
-                                break
-                            case EBridgeMessageType.ON_SUCCESS_CTA_CLICKED:
-                                document.getElementsByTagName('body')[0].removeChild(iframe)
-                                onSuccessCTAClicked?.()
-                                break
-                            case EBridgeMessageType.ON_PAYKEY:
-                                onSuccess?.(event.data as any)
-                                break
-                            case '@straddleio/bridge-js/console':
-                                alert(event.data.method)
-                                {
-                                    const parsedPayload: any = event.data.payload.map((item: any) => {
-                                        try {
-                                            return JSON.parse(item)
-                                        } catch {
-                                            return item
-                                        }
-                                    })
-                                    ;(console[event.data.method as keyof typeof console] as Function).apply(console, parsedPayload)
-                                }
-                                break
-                        }
+            window.addEventListener('message', function (event: MessageEvent<TMessage>) {
+                if (event.origin === straddleBridge.origin) {
+                    verbose && console.log('Message received from widget:', event.data.type, event)
+                    const message = event.data
+                    switch (message?.type) {
+                        case EBridgeMessageType.MOUNTED:
+                            straddleBridge.mounted = true
+                            straddleBridge.send({ type: EBridgeMessageType.INITIALIZE, token })
+                            break
+                        case EBridgeMessageType.ON_CLOSE:
+                            onClose?.()
+                            straddleBridge.mounted = false
+                            document.querySelector(`#${IFRAME_ID}`)?.remove()
+                            break
+                        case EBridgeMessageType.ON_SUCCESS_CTA_CLICKED:
+                            document.getElementsByTagName('body')[0].removeChild(iframe)
+                            onSuccessCTAClicked?.()
+                            break
+                        case EBridgeMessageType.ON_MANUAL_ENTRY:
+                            onManualEntry?.()
+                            break
+                        case EBridgeMessageType.ON_RETRY:
+                            onRetry?.()
+                            break
+                        case EBridgeMessageType.ON_PAYKEY:
+                            onSuccess?.(message.paykeyResponse)
+                            // onSuccess?.(message as any)
+                            break
+                        case EBridgeMessageType.CONSOLE:
+                            {
+                                const parsedPayload: any = message.payload.map((item: any) => {
+                                    try {
+                                        return JSON.parse(item)
+                                    } catch {
+                                        return item
+                                    }
+                                })
+                                'method' in message && (console[message.method] as Function).apply(console, parsedPayload)
+                            }
+                            break
                     }
                 }
-            )
+            })
     },
     getIframe: () => document.getElementById('Straddle-widget-iframe') as HTMLIFrameElement,
     show: () => {
