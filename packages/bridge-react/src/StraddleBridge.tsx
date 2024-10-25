@@ -18,7 +18,7 @@ export const useStraddleBridge = ({ appUrl }: { appUrl: string }) => {
     }
     return { send, iframeMounted, setIframeMounted, bridgeAppMounted, setBridgeAppMounted, url }
 }
-const getParentOrigin = () => typeof window !== 'undefined' && encodeURIComponent(window.location.origin)
+const getParentOrigin = () => typeof window !== 'undefined' && encodeURIComponent(window.location.origin.replace('https://', '').replace('http://', ''))
 
 type TypeStraddleBridgeProps = {
     appUrl: string
