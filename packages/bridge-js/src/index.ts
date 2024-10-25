@@ -35,7 +35,7 @@ export const straddleBridge = {
             className,
             verbose = false,
         } = params
-        straddleBridge.origin = appUrl ?? 'https://dev.straddle.io'
+        straddleBridge.origin = appUrl ?? 'https://production.straddle.io'
         verbose && console.log('init called')
         const iframe = document.createElement('iframe')
         iframe.setAttribute('src', straddleBridge.getUrl())
