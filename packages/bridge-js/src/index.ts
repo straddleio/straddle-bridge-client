@@ -3,7 +3,7 @@ import { EBridgeMessageType, TMessage, TPaykeyResponse } from '@straddleio/bridg
 const IFRAME_ID = 'Straddle-widget-iframe'
 
 export const straddleBridge = {
-    getUrl: () => `${straddleBridge.origin}/${encodeURIComponent(typeof window !== 'undefined' && window.location.origin)}`,
+    getUrl: () => `${straddleBridge.origin}/${encodeURIComponent(typeof window !== 'undefined' && window.location.origin.replace('https://', ''))}`,
     origin: '',
     mounted: false,
     verbose: false,
