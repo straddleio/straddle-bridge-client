@@ -13,7 +13,7 @@ export const useStraddleBridge = ({ appUrl }: { appUrl: string }) => {
     const send = (message: TMessage) => {
         const iframe = document.getElementById(IFRAME_ID) as HTMLIFrameElement
         if (iframe) {
-            iframe.contentWindow?.postMessage(message, url)
+            iframe.contentWindow?.postMessage(message, appUrl)
         }
     }
     return { send, iframeMounted, setIframeMounted, bridgeAppMounted, setBridgeAppMounted, url }
@@ -38,6 +38,7 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
     const { appUrl, open = true, token, onSuccess, onSuccessCTAClicked, onClose, onLoadError, onManualEntry, onRetry, className, style, verbose } = props
     const { send, setIframeMounted, bridgeAppMounted, setBridgeAppMounted, url } = useStraddleBridge({ appUrl })
     const iframeMounted = useRef(false)
+
     useEffect(() => {
         if (open && !iframeMounted.current) {
             iframeMounted.current = true
@@ -70,6 +71,7 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
 
             window.addEventListener('message', function (event: MessageEvent<TMessage>) {
                 // Make sure the message is from the expected origin
+                // console.log('Message here', event.origin, appUrl, event.data)
                 if (event.origin === appUrl) {
                     verbose &&
                         event.data.type !== EBridgeMessageType.CONSOLE &&
