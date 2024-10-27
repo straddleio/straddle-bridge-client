@@ -2,8 +2,16 @@ import { EBridgeMessageType, TMessage, TPaykeyResponse } from '@straddleio/bridg
 
 const IFRAME_ID = 'Straddle-widget-iframe'
 
+const getBridgeParentOrigin = () => typeof window !== 'undefined' && encodeURIComponent(window.location.origin.replace('https://', '').replace('http://', ''))
+const inIframe = () => {
+    try {
+        return window.self !== window.top
+    } catch (e) {
+        return true
+    }
+}
 export const straddleBridge = {
-    getUrl: () => `${straddleBridge.origin}/${encodeURIComponent(typeof window !== 'undefined' && window.location.origin.replace('https://', ''))}`,
+    getUrl: () => `${straddleBridge.origin}/${getBridgeParentOrigin()}`,
     origin: '',
     mounted: false,
     verbose: false,
@@ -60,6 +68,9 @@ export const straddleBridge = {
             window.addEventListener('message', function (event: MessageEvent<TMessage>) {
                 if (event.origin === straddleBridge.origin) {
                     verbose && console.log('Message received from widget:', event.data.type, event)
+                    if (verbose && inIframe()) {
+                        window.parent?.postMessage?.(event.data, '*')
+                    }
                     const message = event.data
                     switch (message?.type) {
                         case EBridgeMessageType.MOUNTED:
@@ -122,7 +133,7 @@ export const straddleBridge = {
     },
     send: function send(message: TMessage) {
         const iframe = document.getElementById('Straddle-widget-iframe') as HTMLIFrameElement
-        console.log('sending message:', message)
+        console.log('sending message:', message, 'to', straddleBridge.origin)
         iframe?.contentWindow?.postMessage(message, straddleBridge.origin)
     },
 }
