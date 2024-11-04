@@ -1,6 +1,11 @@
 {
     "name": "@straddleio/bridge-react",
     "version": "0.1.7",
+    "private": false,
+    "publishConfig": {
+        "access": "public"
+    },
+    "type": "module",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/straddleio/straddle-bridge-client.git",
@@ -22,19 +27,17 @@
         "rollup-plugin-peer-deps-external": "^2.2.4",
         "typescript": "^5"
     },
-    "type": "module",
     "peerDependencies": {
         "@types/react": "^18.3.5",
         "react": "^18",
         "react-dom": "^18.3.1"
     },
+    "dependencies": {
+        "@straddleio/bridge-core": "^0.1.6"
+    },
     "files": [
         "dist/**/*"
     ],
-    "private": false,
-    "publishConfig": {
-        "access": "public"
-    },
     "watch": {
         "build": {
             "patterns": [
@@ -42,8 +45,5 @@
             ],
             "extensions": "ts,tsx"
         }
-    },
-    "dependencies": {
-        "@straddleio/bridge-core": "^0.1.6"
     }
 }

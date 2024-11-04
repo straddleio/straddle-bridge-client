@@ -10,10 +10,12 @@ export default [
             {
                 file: 'dist/bridge-js.cjs.js',
                 format: 'cjs',
+                sourcemap: true,
             },
             {
                 file: 'dist/bridge-js.esm.js',
                 format: 'es',
+                sourcemap: true,
             },
             {
                 file: 'dist/bridge-js.umd.js',
@@ -22,16 +24,19 @@ export default [
                 globals: {
                     '@straddleio/bridge-core': 'BridgeCore',
                 },
+                sourcemap: true,
             },
         ],
         plugins: [
             typescript({
-                compilerOptions: {
-                    moduleResolution: 'node',
-                },
+                tsconfig: './tsconfig.json',
+                declaration: true,
+                declarationDir: './dist/types',
             }),
-            ,
-            resolve(),
+            resolve({
+                browser: true,
+                preferBuiltins: false,
+            }),
             commonjs(),
             terser(),
         ],
@@ -45,8 +50,14 @@ export default [
             name: 'StraddleBridge',
         },
         plugins: [
+            typescript({
+                tsconfig: './tsconfig.json',
+                declaration: true,
+                declarationDir: './dist/types',
+            }),
             resolve({
                 browser: true,
+                preferBuiltins: false,
             }),
             commonjs(),
             terser(),
@@ -60,8 +71,14 @@ export default [
             name: 'StraddleBridge',
         },
         plugins: [
+            typescript({
+                tsconfig: './tsconfig.json',
+                declaration: true,
+                declarationDir: './dist/types',
+            }),
             resolve({
                 browser: true,
+                preferBuiltins: false,
             }),
             commonjs(),
             terser(),
@@ -77,9 +94,8 @@ export default [
         },
         plugins: [
             typescript({
-                compilerOptions: {
-                    moduleResolution: 'node',
-                },
+                tsconfig: './tsconfig.json',
+                declaration: false,
             }),
             resolve({
                 browser: true,
@@ -99,9 +115,8 @@ export default [
         },
         plugins: [
             typescript({
-                compilerOptions: {
-                    moduleResolution: 'node',
-                },
+                tsconfig: './tsconfig.json',
+                declaration: false,
             }),
             resolve({
                 browser: true,

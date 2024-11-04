@@ -14,25 +14,28 @@
     "main": "dist/bridge-js.cjs-bundle.js",
     "module": "dist/bridge-js.esm-bundle.js",
     "browser": "dist/bridge-js.umd.bundle.js",
-    "devDependencies": {
-        "npm-watch": "^0.13.0",
-        "@rollup/plugin-commonjs": "^24.0.0",
-        "@rollup/plugin-node-resolve": "^15.0.0",
-        "@rollup/plugin-terser": "^0.4.0",
-        "@rollup/plugin-typescript": "^11.0.0",
-        "rollup": "^3.20.0",
-        "typescript": "^4.9.0"
-    },
-    "files": [
-        "dist/**/*"
-    ],
+    "types": "dist/types/index.d.ts",
     "scripts": {
         "build": "rm -rf ./dist && rollup -c",
         "dev": "npm-watch",
         "serve": "bun run build && bunx --bunx serve --config ../serve.json dist  -p 3023",
         "publish": "bun run build && bunx --bun npm publish"
     },
-    "types": "dist/index.d.ts",
+    "devDependencies": {
+        "npm-watch": "^0.13.0",
+        "@rollup/plugin-commonjs": "^24.0.0",
+        "@rollup/plugin-node-resolve": "^15.0.0",
+        "@rollup/plugin-terser": "^0.4.0",
+        "@rollup/plugin-typescript": "^11.1.6",
+        "rollup": "^3.20.0",
+        "typescript": "^4.9.0"
+    },
+    "dependencies": {
+        "@straddleio/bridge-core": "^0.1.6"
+    },
+    "files": [
+        "dist/**/*"
+    ],
     "watch": {
         "build": {
             "patterns": [
@@ -40,8 +43,5 @@
             ],
             "extensions": "ts,tsx"
         }
-    },
-    "dependencies": {
-        "@straddleio/bridge-core": "^0.1.6"
     }
 }
