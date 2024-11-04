@@ -24,8 +24,8 @@ export const straddleBridge = {
         onLoadError?: (err: ErrorEvent) => void
         onManualEntry?: () => void
         onRetry?: () => void
-        targetRef: HTMLElement | undefined
-        style: Partial<CSSStyleDeclaration>
+        targetRef?: HTMLElement | undefined
+        style?: Partial<CSSStyleDeclaration>
         className?: string
         verbose?: boolean
     }) {
