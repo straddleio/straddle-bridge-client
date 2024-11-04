@@ -13,8 +13,8 @@ export declare const straddleBridge: {
         onLoadError?: ((err: ErrorEvent) => void) | undefined;
         onManualEntry?: (() => void) | undefined;
         onRetry?: (() => void) | undefined;
-        targetRef: HTMLElement | undefined;
-        style: Partial<CSSStyleDeclaration>;
+        targetRef?: HTMLElement | undefined;
+        style?: Partial<CSSStyleDeclaration> | undefined;
         className?: string | undefined;
         verbose?: boolean | undefined;
     }) => void;
