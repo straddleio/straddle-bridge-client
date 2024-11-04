@@ -1,6 +1,6 @@
 {
     "name": "@straddleio/bridge-js",
-    "version": "0.1.14",
+    "version": "0.1.15",
     "private": false,
     "publishConfig": {
         "access": "public"
@@ -15,6 +15,29 @@
     "module": "dist/bridge-js.esm-bundle.js",
     "browser": "dist/bridge-js.umd.bundle.js",
     "types": "dist/types/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/types/index.d.ts",
+            "import": "./dist/bridge-js.esm.js",
+            "require": "./dist/bridge-js.cjs.js",
+            "default": "./dist/bridge-js.cjs.js"
+        },
+        "./dist/bridge-js.esm": {
+            "types": "./dist/types/index.d.ts",
+            "import": "./dist/bridge-js.esm.js"
+        },
+        "./dist/bridge-js.cjs": {
+            "types": "./dist/types/index.d.ts",
+            "require": "./dist/bridge-js.cjs.js"
+        }
+    },
+    "typesVersions": {
+        "*": {
+            "*": [
+                "./dist/types/*"
+            ]
+        }
+    },
     "scripts": {
         "build": "rm -rf ./dist && rollup -c",
         "dev": "npm-watch",
