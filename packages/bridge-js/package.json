@@ -1,6 +1,6 @@
 {
     "name": "@straddleio/bridge-js",
-    "version": "0.1.12",
+    "version": "0.1.13",
     "private": false,
     "publishConfig": {
         "access": "public"
@@ -32,7 +32,7 @@
         "serve": "bun run build && bunx --bunx serve --config ../serve.json dist  -p 3023",
         "publish": "bun run build && bunx --bun npm publish"
     },
-    "types": "dist/types.d.ts",
+    "types": "dist/index.d.ts",
     "watch": {
         "build": {
             "patterns": [

@@ -125,7 +125,7 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
     }, [open, bridgeAppMounted])
     useEffect(() => {
         typeof window !== 'undefined' &&
-            ((window as any).verbose = {
+            ((window as any).straddleDebug = {
                 enable: () => send({ type: EBridgeMessageType.DEBUG, enable: true }),
                 disable: () => send({ type: EBridgeMessageType.DEBUG, enable: false }),
             })
