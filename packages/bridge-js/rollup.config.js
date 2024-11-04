@@ -10,10 +10,12 @@ export default [
             {
                 file: 'dist/bridge-js.cjs.js',
                 format: 'cjs',
+                sourcemap: true,
             },
             {
                 file: 'dist/bridge-js.esm.js',
                 format: 'es',
+                sourcemap: true,
             },
             {
                 file: 'dist/bridge-js.umd.js',
