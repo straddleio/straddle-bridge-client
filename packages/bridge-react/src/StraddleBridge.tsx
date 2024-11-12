@@ -5,6 +5,7 @@ import { CSSProperties, forwardRef, Ref, useEffect, useRef, useState } from 'rea
 const IFRAME_ID = 'Straddle-widget-iframe'
 
 export const useStraddleBridge = ({ appUrl }: { appUrl: string }) => {
+    appUrl = appUrl.endsWith('/') ? appUrl.slice(0, -1) : appUrl
     const [iframeMounted, setIframeMounted] = useState(false)
     const [bridgeAppMounted, setBridgeAppMounted] = useState(false)
     console.log({ bridgeAppMounted })

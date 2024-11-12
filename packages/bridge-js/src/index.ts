@@ -29,7 +29,7 @@ export const straddleBridge = {
         className?: string
         verbose?: boolean
     }) {
-        const {
+        let {
             appUrl,
             token,
             onSuccess,
@@ -43,6 +43,7 @@ export const straddleBridge = {
             className,
             verbose = false,
         } = params
+        appUrl = appUrl.endsWith('/') ? appUrl.slice(0, -1) : appUrl
         straddleBridge.origin = appUrl ?? 'https://production.straddle.io'
         verbose && console.log('init called')
         const iframe = document.createElement('iframe')
