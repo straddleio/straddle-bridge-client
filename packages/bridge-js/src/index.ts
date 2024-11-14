@@ -129,7 +129,7 @@ export const straddleBridge = {
     remove: () => {
         straddleBridge.verbose && console.log('straddleBridge.remove method called.')
         const iframe = straddleBridge.getIframe()
-        iframe.remove()
+        iframe?.remove()
         straddleBridge.mounted = false
     },
     send: function send(message: TMessage) {
