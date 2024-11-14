@@ -45,7 +45,7 @@ export default [
     {
         input: 'dist/bridge-js.cjs.js',
         output: {
-            file: 'dist/bridge-js.cjs-bundle.js',
+            file: 'dist/bridge-js.cjs.bundle.js',
             format: 'iife',
             name: 'StraddleBridge',
         },
@@ -66,7 +66,7 @@ export default [
     {
         input: 'dist/bridge-js.esm.js',
         output: {
-            file: 'dist/bridge-js.esm-bundle.js',
+            file: 'dist/bridge-js.esm.bundle.js',
             format: 'iife',
             name: 'StraddleBridge',
         },
