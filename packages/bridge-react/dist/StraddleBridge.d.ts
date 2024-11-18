@@ -18,6 +18,7 @@ type TypeStraddleBridgeProps = {
     onSuccessCTAClicked?: () => void;
     onClose?: () => void;
     onLoadError?: (err: ErrorEvent) => void;
+    allowManualEntry?: boolean;
     onManualEntry?: () => void;
     onRetry?: () => void;
     className?: string;

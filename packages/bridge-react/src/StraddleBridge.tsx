@@ -29,6 +29,7 @@ type TypeStraddleBridgeProps = {
     onSuccessCTAClicked?: () => void
     onClose?: () => void
     onLoadError?: (err: ErrorEvent) => void
+    allowManualEntry?: boolean
     onManualEntry?: () => void
     onRetry?: () => void
     className?: string
@@ -36,19 +37,41 @@ type TypeStraddleBridgeProps = {
 }
 
 export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & { verbose?: boolean }>((props, ref) => {
-    const { appUrl, open = true, token, onSuccess, onSuccessCTAClicked, onClose, onLoadError, onManualEntry, onRetry, className, style, verbose } = props
+    const {
+        appUrl,
+        open = true,
+        token,
+        onSuccess,
+        onSuccessCTAClicked,
+        onClose,
+        onLoadError,
+        allowManualEntry = true,
+        onManualEntry,
+        onRetry,
+        className,
+        style,
+        verbose,
+    } = props
     const { send, setIframeMounted, bridgeAppMounted, setBridgeAppMounted, url } = useStraddleBridge({ appUrl })
     const iframeMounted = useRef(false)
 
     useEffect(() => {
-        if (open && !iframeMounted.current) {
-            iframeMounted.current = true
-            const iframe = document.createElement('iframe')
-            iframe.setAttribute('src', url)
-            iframe.addEventListener('error', (errorEvent) => {
+        let errorHandler: (errorEvent: ErrorEvent) => void
+        let messageHandler: (event: MessageEvent<TMessage>) => void
+        if (open) {
+            let iframe: HTMLIFrameElement | null = document.querySelector('#' + IFRAME_ID)
+            if (!iframe) {
+                // iframeMounted.current = true
+                iframe = document.createElement('iframe')
+                iframe.setAttribute('src', url)
+            }
+            errorHandler = (errorEvent: ErrorEvent) => {
                 console.error('Error loading Straddle Widget')
                 onLoadError?.(errorEvent)
-            })
+            }
+            if (iframe) {
+                iframe.addEventListener('error', errorHandler)
+            }
             iframe.id = IFRAME_ID
             let iframe_style = style
             if (!style) {
@@ -69,8 +92,7 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
                 }
                 document.getElementsByTagName('body')[0].appendChild(iframe)
             }
-
-            window.addEventListener('message', function (event: MessageEvent<TMessage>) {
+            messageHandler = function (event: MessageEvent<TMessage>) {
                 // Make sure the message is from the expected origin
                 // console.log('Message here', event.origin, appUrl, event.data)
                 if (event.origin === appUrl) {
@@ -83,7 +105,9 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
                             break
                         case EBridgeMessageType.MOUNTED:
                             setBridgeAppMounted(true)
-                            send({ type: EBridgeMessageType.INITIALIZE, token })
+                            console.log('HERE, sending initialize', allowManualEntry)
+                            // alert('sending initialize with allowManualEntry' + allowManualEntry)
+                            send({ type: EBridgeMessageType.INITIALIZE, token, allowManualEntry })
                             break
                         case EBridgeMessageType.ON_CLOSE:
                             onClose?.()
@@ -116,14 +140,20 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
                             break
                     }
                 }
-            })
+            }
+            window.addEventListener('message', messageHandler)
         } else if (!open && iframeMounted) {
             document.querySelector(`#${IFRAME_ID}`)?.remove()
             setIframeMounted(false)
             iframeMounted.current = false
             setBridgeAppMounted(false)
         }
-    }, [open, bridgeAppMounted])
+        return () => {
+            const iframe: HTMLIFrameElement | null = document.querySelector('#' + IFRAME_ID)
+            errorHandler && iframe && iframe.removeEventListener('error', errorHandler)
+            messageHandler && window.removeEventListener('message', messageHandler)
+        }
+    }, [open])
     useEffect(() => {
         typeof window !== 'undefined' &&
             ((window as any).straddleDebug = {
