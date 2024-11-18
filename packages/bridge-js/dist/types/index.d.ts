@@ -11,6 +11,7 @@ export declare const straddleBridge: {
         onSuccessCTAClicked?: (() => void) | undefined;
         onClose?: (() => void) | undefined;
         onLoadError?: ((err: ErrorEvent) => void) | undefined;
+        allowManualEntry?: boolean | undefined;
         onManualEntry?: (() => void) | undefined;
         onRetry?: (() => void) | undefined;
         targetRef?: HTMLElement | undefined;

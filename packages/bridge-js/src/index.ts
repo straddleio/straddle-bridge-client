@@ -22,6 +22,7 @@ export const straddleBridge = {
         onSuccessCTAClicked?: () => void
         onClose?: () => void
         onLoadError?: (err: ErrorEvent) => void
+        allowManualEntry?: boolean
         onManualEntry?: () => void
         onRetry?: () => void
         targetRef?: HTMLElement | undefined
@@ -36,6 +37,7 @@ export const straddleBridge = {
             onSuccessCTAClicked,
             onClose,
             onLoadError,
+            allowManualEntry = true,
             onManualEntry,
             onRetry,
             targetRef,
@@ -76,7 +78,7 @@ export const straddleBridge = {
                     switch (message?.type) {
                         case EBridgeMessageType.MOUNTED:
                             straddleBridge.mounted = true
-                            straddleBridge.send({ type: EBridgeMessageType.INITIALIZE, token })
+                            straddleBridge.send({ type: EBridgeMessageType.INITIALIZE, token, allowManualEntry })
                             break
                         case EBridgeMessageType.ON_CLOSE:
                             onClose?.()
