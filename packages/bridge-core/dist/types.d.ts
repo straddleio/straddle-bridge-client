@@ -9,7 +9,6 @@ export type TPaykeyMessage = {
 export type TMessageInitialize = {
     type: EBridgeMessageType.INITIALIZE;
     token: string;
-    allowManualEntry?: boolean;
 };
 export type TMessageDebug = {
     type: EBridgeMessageType.DEBUG;
