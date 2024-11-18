@@ -49,7 +49,7 @@ export const straddleBridge = {
         straddleBridge.origin = appUrl ?? 'https://production.straddle.io'
         verbose && console.log('init called')
         const iframe = document.createElement('iframe')
-        iframe.setAttribute('src', straddleBridge.getUrl())
+        iframe.setAttribute('src', straddleBridge.getUrl() + '?allowManualEntry=' + allowManualEntry)
         iframe.addEventListener('error', (errorEvent) => {
             console.error('Error loading Straddle Widget')
             onLoadError?.(errorEvent)
@@ -78,7 +78,7 @@ export const straddleBridge = {
                     switch (message?.type) {
                         case EBridgeMessageType.MOUNTED:
                             straddleBridge.mounted = true
-                            straddleBridge.send({ type: EBridgeMessageType.INITIALIZE, token, allowManualEntry })
+                            straddleBridge.send({ type: EBridgeMessageType.INITIALIZE, token })
                             break
                         case EBridgeMessageType.ON_CLOSE:
                             onClose?.()

@@ -63,7 +63,7 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
             if (!iframe) {
                 // iframeMounted.current = true
                 iframe = document.createElement('iframe')
-                iframe.setAttribute('src', url)
+                iframe.setAttribute('src', `${url}?allowManualEntry=${allowManualEntry}`)
             }
             errorHandler = (errorEvent: ErrorEvent) => {
                 console.error('Error loading Straddle Widget')
@@ -105,9 +105,7 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
                             break
                         case EBridgeMessageType.MOUNTED:
                             setBridgeAppMounted(true)
-                            console.log('HERE, sending initialize', allowManualEntry)
-                            // alert('sending initialize with allowManualEntry' + allowManualEntry)
-                            send({ type: EBridgeMessageType.INITIALIZE, token, allowManualEntry })
+                            send({ type: EBridgeMessageType.INITIALIZE, token })
                             break
                         case EBridgeMessageType.ON_CLOSE:
                             onClose?.()
