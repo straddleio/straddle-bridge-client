@@ -1,11 +1,6 @@
 {
     "name": "@straddleio/bridge-react",
     "version": "0.1.8",
-    "private": false,
-    "publishConfig": {
-        "access": "public"
-    },
-    "type": "module",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/straddleio/straddle-bridge-client.git",
@@ -13,12 +8,6 @@
     },
     "main": "dist/index.js",
     "module": "dist/index.esm.js",
-    "types": "dist/index.d.ts",
-    "scripts": {
-        "build": "rollup -c",
-        "dev": "npm-watch",
-        "publish": "bun run build && bunx --bun npm publish"
-    },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^26.0.1",
         "@rollup/plugin-terser": "^0.4.4",
@@ -32,12 +21,20 @@
         "react": "^18",
         "react-dom": "^18.3.1"
     },
-    "dependencies": {
-        "@straddleio/bridge-core": "^0.1.6"
-    },
     "files": [
         "dist/**/*"
     ],
+    "private": false,
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "build": "rollup -c",
+        "dev": "npm-watch",
+        "publish": "bun run build && bunx --bun npm publish"
+    },
+    "type": "module",
+    "types": "dist/index.d.ts",
     "watch": {
         "build": {
             "patterns": [
@@ -45,5 +42,8 @@
             ],
             "extensions": "ts,tsx"
         }
+    },
+    "dependencies": {
+        "@straddleio/bridge-core": "^0.1.7"
     }
 }

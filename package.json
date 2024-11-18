@@ -1,5 +1,6 @@
 {
     "name": "@straddleio/bridge",
+    "private": true,
     "repository": {
         "type": "git",
         "url": "git+https://github.com/straddleio/straddle-bridge-client.git"
@@ -10,6 +11,7 @@
         ]
     },
     "scripts": {
+        "publish-packages": "dotenv -- npm publish --workspaces --access public",
         "build": "bun run build --workspaces"
     },
     "prettier": {
