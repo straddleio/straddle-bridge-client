@@ -1,11 +1,6 @@
 {
     "name": "@straddleio/bridge-js",
     "version": "0.1.18",
-    "private": false,
-    "publishConfig": {
-        "access": "public"
-    },
-    "type": "module",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/straddleio/straddle-bridge-client.git",
@@ -13,8 +8,15 @@
     },
     "main": "dist/bridge-js.cjs-bundle.js",
     "module": "dist/bridge-js.esm-bundle.js",
-    "browser": "dist/bridge-js.umd.bundle.js",
-    "types": "dist/types/index.d.ts",
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^24.0.0",
+        "@rollup/plugin-node-resolve": "^15.0.0",
+        "@rollup/plugin-terser": "^0.4.0",
+        "@rollup/plugin-typescript": "^11.1.6",
+        "npm-watch": "^0.13.0",
+        "rollup": "^3.20.0",
+        "typescript": "^4.9.0"
+    },
     "exports": {
         ".": {
             "types": "./dist/types/index.d.ts",
@@ -31,12 +33,13 @@
             "require": "./dist/bridge-js.cjs.js"
         }
     },
-    "typesVersions": {
-        "*": {
-            "*": [
-                "./dist/types/*"
-            ]
-        }
+    "browser": "dist/bridge-js.umd.bundle.js",
+    "files": [
+        "dist/**/*"
+    ],
+    "private": false,
+    "publishConfig": {
+        "access": "public"
     },
     "scripts": {
         "build": "rm -rf ./dist && rollup -c",
@@ -44,21 +47,15 @@
         "serve": "bun run build && bunx --bunx serve --config ../serve.json dist  -p 3023",
         "publish": "bun run build && bunx --bun npm publish"
     },
-    "devDependencies": {
-        "npm-watch": "^0.13.0",
-        "@rollup/plugin-commonjs": "^24.0.0",
-        "@rollup/plugin-node-resolve": "^15.0.0",
-        "@rollup/plugin-terser": "^0.4.0",
-        "@rollup/plugin-typescript": "^11.1.6",
-        "rollup": "^3.20.0",
-        "typescript": "^4.9.0"
+    "type": "module",
+    "types": "dist/types/index.d.ts",
+    "typesVersions": {
+        "*": {
+            "*": [
+                "./dist/types/*"
+            ]
+        }
     },
-    "dependencies": {
-        "@straddleio/bridge-core": "^0.1.6"
-    },
-    "files": [
-        "dist/**/*"
-    ],
     "watch": {
         "build": {
             "patterns": [
@@ -66,5 +63,8 @@
             ],
             "extensions": "ts,tsx"
         }
+    },
+    "dependencies": {
+        "@straddleio/bridge-core": "^0.1.7"
     }
 }

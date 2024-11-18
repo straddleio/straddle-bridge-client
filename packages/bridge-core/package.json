@@ -31,5 +31,12 @@
             ],
             "extensions": "ts,tsx"
         }
-    }
+    },
+    "description": "Straddle Bridge Core library",
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/straddleio/straddle-bridge-client/issues"
+    },
+    "homepage": "https://github.com/straddleio/straddle-bridge-client#readme"
 }
