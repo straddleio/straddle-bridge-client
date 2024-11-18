@@ -1,0 +1,2 @@
+[install.scopes]
+"@straddleio" = { token = "$NPM_TOKEN", url = "https://registry.npmjs.org/" }
