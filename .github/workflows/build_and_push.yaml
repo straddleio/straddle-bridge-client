@@ -5,6 +5,9 @@ on:
   push:
     branches:
       - main  # Adjust to your default branch
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build-and-upload:
@@ -19,7 +22,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16' # Adjust to your desired Node.js version
+          node-version: '20' # Adjust to your desired Node.js version
 
       # Install dependencies and build
       - name: Install dependencies and build
