@@ -1,0 +1,63 @@
+name: Build and Deploy bridge client to azure.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main  # Adjust to your default branch
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' # Adjust to your desired Node.js version
+
+      # Install dependencies and build
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build
+
+      # Get version from package.json
+      - name: Extract version from package.json
+        id: get-version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_ENV
+
+      # Rename files with version
+      - name: Rename files with version
+        run: |
+          mv dist/bridge-js.umd.bundle.js dist/bridge-js-umd-${version}.js
+          mv dist/bridge-js.esm-bundle.js dist/bridge-js-esm-${version}.js
+          mv dist/bridge-js-umd-0.1.js dist/bridge-js-umd-${version}.js
+
+      # Upload to Azure Blob Storage
+      - name: Upload files to Azure Blob
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az storage blob upload \
+              --account-name straddlewidgets \
+              --container-name bridge \
+              --name "bridge-js-umd-${{ env.version }}.js" \
+              --file "dist/bridge-js-umd-${{ env.version }}.js"
+            az storage blob upload \
+              --account-name straddlewidgets \
+              --container-name bridge \
+              --name "bridge-js-esm-${{ env.version }}.js" \
+              --file "dist/bridge-js-esm-${{ env.version }}.js"
+            az storage blob upload \
+              --account-name straddlewidgets \
+              --container-name bridge \
+              --name "bridge-js-umd-${{ env.version }}.js" \
+              --file "dist/bridge-js-umd-${{ env.version }}.js"
