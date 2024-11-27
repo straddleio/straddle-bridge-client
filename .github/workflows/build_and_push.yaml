@@ -18,10 +18,9 @@ jobs:
 
       # Set up Bun
       - name: Install Bun
-        run: |
-          curl -fsSL https://bun.sh/install | bash
-          echo 'export PATH="$HOME/.bun/bin:$PATH"' >> $GITHUB_ENV
-          source $GITHUB_ENV
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       # Install dependencies and build
       - name: Install dependencies and build with Bun
