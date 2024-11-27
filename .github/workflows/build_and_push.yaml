@@ -1,0 +1,73 @@
+name: Build and Deploy bridge client to azure.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main  
+  pull_request:
+    branches:
+      - feature/build-and-deploy-workflow
+  
+
+jobs:
+  build-and-upload:
+    runs-on: self-hosted
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Bun
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # Install dependencies and build
+      - name: Install dependencies and build with Bun
+        run: |
+          bun install
+          bun run build
+
+      # Get version from package.json
+      # Get full version and major.minor version
+      - name: Extract version details
+        id: get-version
+        run: |
+          FULL_VERSION=`bun -e "console.write(require('./packages/bridge-js/package.json').version)"`
+          MAJOR_MINOR_VERSION=$(echo $FULL_VERSION | cut -d. -f1,2)
+          echo "full_version=$FULL_VERSION" >> $GITHUB_ENV
+          echo "major_minor_version=$MAJOR_MINOR_VERSION" >> $GITHUB_ENV
+
+      - name: Login to Azure
+        run: |
+          az login --identity --allow-no-subscriptions          
+
+      - name: Validate build artifacts
+        run: |
+          for file in "bridge-js.umd" "bridge-js.esm" "bridge-js.cjs"; do
+            if [ ! -f "packages/bridge-js/dist/${file}.bundle.js" ]; then
+              echo "${file} bundle missing!"
+              exit 1
+            fi
+          done
+
+      - name: Upload files to Azure Blob
+        run: |
+          for type in "umd" "esm" "cjs"; do
+            az storage blob upload \
+              --account-name straddlewidgets \
+              --container-name bridge \
+              --auth-mode login \
+              --overwrite true \
+              --file "packages/bridge-js/dist/bridge-js.${type}.bundle.js" \
+              --name "bridge-js-${{ env.full_version }}.${type}.js"
+            az storage blob upload \
+              --account-name straddlewidgets \
+              --container-name bridge \
+              --auth-mode login \
+              --overwrite true \
+              --file "packages/bridge-js/dist/bridge-js.${type}.bundle.js" \
+              --name "bridge-js-${{ env.major_minor_version }}.${type}.js"
+          done
