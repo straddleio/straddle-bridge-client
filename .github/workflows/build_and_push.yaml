@@ -13,8 +13,6 @@ on:
 jobs:
   build-and-upload:
     runs-on: self-hosted
-
-
     steps:
       # Checkout the repository
       - name: Checkout code
