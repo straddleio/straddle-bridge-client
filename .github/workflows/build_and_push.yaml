@@ -16,31 +16,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20' # Adjust to your desired Node.js version
+      # Set up Bun
+      - name: Install Bun
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          echo 'export PATH="$HOME/.bun/bin:$PATH"' >> $GITHUB_ENV
+          source $GITHUB_ENV
 
       # Install dependencies and build
-      - name: Install dependencies and build
+      - name: Install dependencies and build with Bun
         run: |
-          npm install
-          npm run build
+          bun install
+          bun build
 
       # Get version from package.json
-      - name: Extract version from package.json
+      # Get full version and major.minor version
+      - name: Extract version details
         id: get-version
         run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "version=$VERSION" >> $GITHUB_ENV
+          FULL_VERSION=$(bun run -p "require('./package.json').version")
+          MAJOR_MINOR_VERSION=$(echo $FULL_VERSION | cut -d. -f1,2)
+          echo "full_version=$FULL_VERSION" >> $GITHUB_ENV
+          echo "major_minor_version=$MAJOR_MINOR_VERSION" >> $GITHUB_ENV
 
-      # Rename files with version
-      - name: Rename files with version
-        run: |
-          mv dist/bridge-js.umd.bundle.js dist/bridge-js-umd-${version}.js
-          mv dist/bridge-js.esm-bundle.js dist/bridge-js-esm-${version}.js
-          mv dist/bridge-js-umd-0.1.js dist/bridge-js-umd-${version}.js
 
       # Upload to Azure Blob Storage
       - name: Upload files to Azure Blob
@@ -50,15 +48,31 @@ jobs:
             az storage blob upload \
               --account-name straddlewidgets \
               --container-name bridge \
-              --name "bridge-js-umd-${{ env.version }}.js" \
-              --file "dist/bridge-js-umd-${{ env.version }}.js"
+              --name "bridge-js-umd.bundle.js" \
+              --file "dist/bridge-js-umd-${{ env.full_version }}.js"
             az storage blob upload \
               --account-name straddlewidgets \
               --container-name bridge \
-              --name "bridge-js-esm-${{ env.version }}.js" \
-              --file "dist/bridge-js-esm-${{ env.version }}.js"
+              --name "bridge-js-umd.bundle.js" \
+              --file "dist/bridge-js-umd-${{ env.major_minor_version }}.js"              
             az storage blob upload \
               --account-name straddlewidgets \
               --container-name bridge \
-              --name "bridge-js-umd-${{ env.version }}.js" \
-              --file "dist/bridge-js-umd-${{ env.version }}.js"
+              --name "bridge-js-esm-bundle.js" \
+              --file "dist/bridge-js-esm-${{ env.full_version }}.js"
+            az storage blob upload \
+              --account-name straddlewidgets \
+              --container-name bridge \
+              --name "bridge-js-esm-bundle.js" \
+              --file "dist/bridge-js-esm-${{ env.major_minor_version }}.js"              
+            az storage blob upload \ }}.js"
+              az storage blob upload \
+              --account-name straddlewidgets \
+              --container-name bridge \
+              --name "bridge-js-cjs-bundle.js" \
+              --file "dist/bridge-js-cjs-${{ env.full_version }}.js"
+            az storage blob upload \
+              --account-name straddlewidgets \
+              --container-name bridge \
+              --name "bridge-js-cjs-bundle.js" \
+              --file "dist/bridge-js-cjs-${{ env.major_minor_version }}.js"
