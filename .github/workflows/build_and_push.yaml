@@ -41,6 +41,9 @@ jobs:
           echo "full_version=$FULL_VERSION" >> $GITHUB_ENV
           echo "major_minor_version=$MAJOR_MINOR_VERSION" >> $GITHUB_ENV
 
+      - name: Login to Azure
+        run: |
+          az login --identity --allow-no-subscriptions          
 
       # Upload to Azure Blob Storage
       - name: Upload files to Azure Blob
