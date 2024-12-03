@@ -1,7 +1,9 @@
-import { TMessage, TPaykeyResponse } from '@straddleio/bridge-core';
+import { TMessage, TMode, TPaykeyResponse } from '@straddleio/bridge-core';
 import { CSSProperties } from 'react';
-export declare const useStraddleBridge: ({ appUrl }: {
-    appUrl: string;
+export type { TMode } from '@straddleio/bridge-core';
+export declare const useStraddleBridge: ({ mode, appUrl }: {
+    mode?: TMode;
+    appUrl?: string;
 }) => {
     send: (message: TMessage) => void;
     iframeMounted: boolean;
@@ -11,7 +13,8 @@ export declare const useStraddleBridge: ({ appUrl }: {
     url: string;
 };
 type TypeStraddleBridgeProps = {
-    appUrl: string;
+    mode?: TMode;
+    appUrl?: string;
     open?: boolean;
     token: string;
     onSuccess?: (payload: TPaykeyResponse) => void;
@@ -27,5 +30,4 @@ type TypeStraddleBridgeProps = {
 export declare const StraddleBridge: import("react").ForwardRefExoticComponent<TypeStraddleBridgeProps & {
     verbose?: boolean;
 } & import("react").RefAttributes<HTMLElement>>;
-export {};
 //# sourceMappingURL=StraddleBridge.d.ts.map
