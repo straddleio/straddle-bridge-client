@@ -43,6 +43,7 @@ export type TPaykeyResponse = {
     response_type: 'object';
 };
 export type TMessage = TBaseMessage | TMessageInitialize | TPaykeyMessage | TMessageDebug | TMessageConsole;
+export type TMode = 'production' | 'sandbox';
 export declare enum EBridgeMessageType {
     PING = "@straddleio/js-bridge/ping",
     ERROR = "@straddleio/js-bridge/error",

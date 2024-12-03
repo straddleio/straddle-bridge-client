@@ -39,6 +39,8 @@ export type TPaykeyResponse = {
 }
 export type TMessage = TBaseMessage | TMessageInitialize | TPaykeyMessage | TMessageDebug | TMessageConsole
 
+export type TMode = 'production' | 'sandbox'
+
 export enum EBridgeMessageType {
     PING = '@straddleio/js-bridge/ping',
     ERROR = '@straddleio/js-bridge/error',
