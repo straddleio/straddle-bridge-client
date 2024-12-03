@@ -1,4 +1,5 @@
-import { EBridgeMessageType, TMessage, TPaykeyResponse } from '@straddleio/bridge-core'
+import { EBridgeMessageType, TMessage, TMode, TPaykeyResponse } from '@straddleio/bridge-core'
+export type { TMode } from '@straddleio/bridge-core'
 
 const IFRAME_ID = 'Straddle-widget-iframe'
 
@@ -10,13 +11,22 @@ const inIframe = () => {
         return true
     }
 }
+
+const appUrlDictionary: Record<TMode, string> = {
+    production: 'https://bridge.straddle.io',
+    sandbox: 'https://bridge-sandbox.straddle.io',
+}
+
+const getAppURLFromMode = (mode?: TMode) => appUrlDictionary[mode ?? 'production']
+
 export const straddleBridge = {
     getUrl: () => `${straddleBridge.origin}/${getBridgeParentOrigin()}`,
     origin: '',
     mounted: false,
     verbose: false,
     init: function init(params: {
-        appUrl: string
+        mode?: TMode
+        appUrl?: string
         token: string
         onSuccess?: (payload: TPaykeyResponse) => void
         onSuccessCTAClicked?: () => void
@@ -31,6 +41,7 @@ export const straddleBridge = {
         verbose?: boolean
     }) {
         let {
+            mode,
             appUrl,
             token,
             onSuccess,
@@ -45,6 +56,7 @@ export const straddleBridge = {
             className,
             verbose = false,
         } = params
+        appUrl = appUrl ?? getAppURLFromMode(mode)
         appUrl = appUrl.endsWith('/') ? appUrl.slice(0, -1) : appUrl
         straddleBridge.origin = appUrl ?? 'https://production.straddle.io'
         verbose && console.log('init called')

@@ -1,11 +1,13 @@
-import { TMessage, TPaykeyResponse } from '@straddleio/bridge-core';
+import { TMessage, TMode, TPaykeyResponse } from '@straddleio/bridge-core';
+export type { TMode } from '@straddleio/bridge-core';
 export declare const straddleBridge: {
     getUrl: () => string;
     origin: string;
     mounted: boolean;
     verbose: boolean;
     init: (params: {
-        appUrl: string;
+        mode?: TMode | undefined;
+        appUrl?: string | undefined;
         token: string;
         onSuccess?: ((payload: TPaykeyResponse) => void) | undefined;
         onSuccessCTAClicked?: (() => void) | undefined;

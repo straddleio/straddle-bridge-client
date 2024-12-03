@@ -1,10 +1,19 @@
 'use client'
-import { EBridgeMessageType, TMessage, TPaykeyResponse } from '@straddleio/bridge-core'
-import { CSSProperties, forwardRef, Ref, useEffect, useRef, useState } from 'react'
+import { EBridgeMessageType, TMessage, TMode, TPaykeyResponse } from '@straddleio/bridge-core'
+import { CSSProperties, forwardRef, useEffect, useRef, useState } from 'react'
+export type { TMode } from '@straddleio/bridge-core'
 
 const IFRAME_ID = 'Straddle-widget-iframe'
 
-export const useStraddleBridge = ({ appUrl }: { appUrl: string }) => {
+const appUrlDictionary: Record<TMode, string> = {
+    production: 'https://bridge.straddle.io',
+    sandbox: 'https://bridge-sandbox.straddle.io',
+}
+
+const getAppURLFromMode = (mode?: TMode) => appUrlDictionary[mode ?? 'production']
+
+export const useStraddleBridge = ({ mode, appUrl }: { mode?: TMode; appUrl?: string }) => {
+    appUrl = appUrl ?? getAppURLFromMode(mode)
     appUrl = appUrl.endsWith('/') ? appUrl.slice(0, -1) : appUrl
     const [iframeMounted, setIframeMounted] = useState(false)
     const [bridgeAppMounted, setBridgeAppMounted] = useState(false)
@@ -22,7 +31,8 @@ export const useStraddleBridge = ({ appUrl }: { appUrl: string }) => {
 const getParentOrigin = () => typeof window !== 'undefined' && encodeURIComponent(window.location.origin.replace('https://', '').replace('http://', ''))
 
 type TypeStraddleBridgeProps = {
-    appUrl: string
+    mode?: TMode
+    appUrl?: string
     open?: boolean
     token: string
     onSuccess?: (payload: TPaykeyResponse) => void
@@ -38,6 +48,7 @@ type TypeStraddleBridgeProps = {
 
 export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & { verbose?: boolean }>((props, ref) => {
     const {
+        mode,
         appUrl,
         open = true,
         token,
@@ -52,7 +63,7 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
         style,
         verbose,
     } = props
-    const { send, setIframeMounted, bridgeAppMounted, setBridgeAppMounted, url } = useStraddleBridge({ appUrl })
+    const { send, setIframeMounted, bridgeAppMounted, setBridgeAppMounted, url } = useStraddleBridge({ mode, appUrl })
     const iframeMounted = useRef(false)
 
     useEffect(() => {
@@ -76,6 +87,7 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
             let iframe_style = style
             if (!style) {
                 iframe_style = { position: 'fixed', width: '100%', height: '100%', top: '0%', left: '0', zIndex: '2147483647' }
+                // iframe_style = { position: 'fixed', width: '100%', height: '100%', top: '0%', left: '0', zIndex: '2147483647', backgroundColor: '#fafaf9' }
             }
             iframe_style && Object.assign(iframe.style, iframe_style)
 
