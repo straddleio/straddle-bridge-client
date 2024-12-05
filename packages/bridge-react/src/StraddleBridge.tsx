@@ -17,7 +17,6 @@ export const useStraddleBridge = ({ mode, appUrl }: { mode?: TMode; appUrl?: str
     appUrl = appUrl.endsWith('/') ? appUrl.slice(0, -1) : appUrl
     const [iframeMounted, setIframeMounted] = useState(false)
     const [bridgeAppMounted, setBridgeAppMounted] = useState(false)
-    console.log({ bridgeAppMounted })
     const parentOrigin = getParentOrigin()
     const url = `${appUrl}/${parentOrigin}/`
     const send = (message: TMessage) => {
@@ -35,7 +34,7 @@ type TypeStraddleBridgeProps = {
     appUrl?: string
     open?: boolean
     token: string
-    onSuccess?: (payload: TPaykeyResponse) => void
+    onSuccess: (payload: TPaykeyResponse) => void
     onSuccessCTAClicked?: () => void
     onClose?: () => void
     onLoadError?: (err: ErrorEvent) => void

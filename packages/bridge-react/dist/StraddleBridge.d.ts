@@ -17,7 +17,7 @@ type TypeStraddleBridgeProps = {
     appUrl?: string;
     open?: boolean;
     token: string;
-    onSuccess?: (payload: TPaykeyResponse) => void;
+    onSuccess: (payload: TPaykeyResponse) => void;
     onSuccessCTAClicked?: () => void;
     onClose?: () => void;
     onLoadError?: (err: ErrorEvent) => void;
