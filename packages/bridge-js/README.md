@@ -59,15 +59,14 @@ straddleBridge.init({
 
 ### Parameters
 
--   **mode**: (Optional) Possible values: production, sandbox. Defaults to production.
 -   **token**: (Required) Authentication token obtained from Straddle's API.
--   **onSuccess**: (Optional) Callback function invoked when the operation is successful.
+-   **onSuccess**: (Required) Callback function invoked when the operation is successful. This is how you can access the Paykey.
+-   **mode**: (Optional) Possible values: production, sandbox. Defaults to production.
 -   **onSuccessCTAClicked**: (Optional) Callback function invoked when the CTA (Call to Action) button is clicked.
 -   **onClose**: (Optional) Callback function invoked when the Straddle widget is closed.
 -   **onLoadError**: Callback function invoked when there's an error loading the Straddle iframe.
 -   **onManualEntry**: (Optional) Callback function invoked when the user clicks the manual entry button.
 -   **onRetry**: (Optional) Callback function invoked when the user clicks the retry button.
--   **onPaykey**: (Optional) Callback function invoked when a paykey event occurs.
 -   **targetRef**: (Optional) Reference to the HTML element where the Straddle widget should be appended. If not passed, the widget will be appended to the body.
 -   **style**: (Optional) Custom styles for the iframe containing the Straddle widget. If passed, it should be an object with CSS properties, and will replace any default style. If not passed, the widget will fill the whole screen.
 -   **className**: (Optional) Custom class names for styling the iframe. This will not replace the default styling, if you want no style to be applied you must pass an empty object as style.

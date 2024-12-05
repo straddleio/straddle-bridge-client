@@ -1,6 +1,6 @@
 {
     "name": "@straddleio/bridge-js",
-    "version": "0.1.22",
+    "version": "0.1.23",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/straddleio/straddle-bridge-client.git",
