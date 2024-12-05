@@ -93,7 +93,7 @@ export default StraddleBridgeController
 
 ## API Reference
 
-For detailed API documentation, please refer to the [Straddle API Documentation](https://docs.straddle.io).
+For detailed API documentation, please refer to the [Straddle API Documentation](https://docs.straddle.io/guides/bridge/widget).
 
 ## License
 
