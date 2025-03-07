@@ -9,7 +9,7 @@ export declare const straddleBridge: {
         mode?: TMode | undefined;
         appUrl?: string | undefined;
         token: string;
-        onSuccess?: ((payload: TPaykeyResponse) => void) | undefined;
+        onSuccess: (payload: TPaykeyResponse) => void;
         onSuccessCTAClicked?: (() => void) | undefined;
         onClose?: (() => void) | undefined;
         onLoadError?: ((err: ErrorEvent) => void) | undefined;

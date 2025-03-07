@@ -29,7 +29,7 @@ import { StraddleBridge } from '@straddleio/bridge-react'
 const StraddleBridgeController = () => {
     const [open, setOpen] = useState(true)
     const token = 'your-authentication-token' // replace with your token
-    const appUrl = '' // replace with your real URL
+    const mode = 'sandbox' // 'production' or 'sandbox'
 
     const handleSuccess = (data: TPaykeyResponse) => {
         console.log('Success event, paykey data is:', data)
@@ -53,7 +53,7 @@ const StraddleBridgeController = () => {
             <button onClick={() => setOpen(true)}>Open Straddle Widget</button>
             {open && (
                 <StraddleBridge
-                    appUrl={appUrl}
+                    mode={mode}
                     token={token}
                     onSuccess={handleSuccess}
                     onSuccessCTAClicked={handleSuccessCTAClicked}
@@ -80,7 +80,7 @@ export default StraddleBridgeController
 
 -   **token**: (Required) Authentication token obtained from Straddle's API.
 -   **onSuccess**: (Required) Callback function invoked when the operation is successful. This is how you can access the Paykey.
--   **mode**: (Optional) Possible values: production, sandbox. Defaults to production.
+-   **mode**: (Required) Possible values: production, sandbox.
 -   **open**: (Optional) Boolean indicating whether the Straddle widget should be displayed.
 -   **onSuccessCTAClicked**: (Optional) Callback function invoked when the CTA (Call to Action) button is clicked.
 -   **onClose**: (Optional) Callback function invoked when the Straddle widget is closed.

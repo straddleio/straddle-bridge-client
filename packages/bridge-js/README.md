@@ -26,7 +26,7 @@ Here's an example of how to use `@straddleio/bridge-js` in your application:
 import { straddleBridge } from '@straddleio/bridge-js'
 
 straddleBridge.init({
-    appUrl: '', // replace with the actual URL
+    mode: 'sandbox', // 'production' or 'sandbox'
     token: 'your-authentication-token', // replace with your token
     onSuccess: (payload) => {
         console.log('Success event, paykey data is:', data)
@@ -61,7 +61,7 @@ straddleBridge.init({
 
 -   **token**: (Required) Authentication token obtained from Straddle's API.
 -   **onSuccess**: (Required) Callback function invoked when the operation is successful. This is how you can access the Paykey.
--   **mode**: (Optional) Possible values: production, sandbox. Defaults to production.
+-   **mode**: (Required) Possible values: production, sandbox.
 -   **onSuccessCTAClicked**: (Optional) Callback function invoked when the CTA (Call to Action) button is clicked.
 -   **onClose**: (Optional) Callback function invoked when the Straddle widget is closed.
 -   **onLoadError**: Callback function invoked when there's an error loading the Straddle iframe.
