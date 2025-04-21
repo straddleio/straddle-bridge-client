@@ -15,7 +15,6 @@ const getAppURLFromMode = (mode?: TMode) => appUrlDictionary[mode ?? 'production
 export const useStraddleBridge = ({ mode, appUrl }: { mode?: TMode; appUrl?: string }) => {
     appUrl = appUrl ?? getAppURLFromMode(mode)
     appUrl = appUrl.endsWith('/') ? appUrl.slice(0, -1) : appUrl
-    const [iframeMounted, setIframeMounted] = useState(false)
     const [bridgeAppMounted, setBridgeAppMounted] = useState(false)
     const parentOrigin = getParentOrigin()
     const url = `${appUrl}/${parentOrigin}/`
@@ -25,7 +24,7 @@ export const useStraddleBridge = ({ mode, appUrl }: { mode?: TMode; appUrl?: str
             iframe.contentWindow?.postMessage(message, appUrl)
         }
     }
-    return { send, iframeMounted, setIframeMounted, bridgeAppMounted, setBridgeAppMounted, url }
+    return { send, bridgeAppMounted, setBridgeAppMounted, url, appUrl }
 }
 const getParentOrigin = () => typeof window !== 'undefined' && encodeURIComponent(window.location.origin.replace('https://', '').replace('http://', ''))
 
@@ -48,7 +47,6 @@ type TypeStraddleBridgeProps = {
 export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & { verbose?: boolean }>((props, ref) => {
     const {
         mode,
-        appUrl,
         open = true,
         token,
         onSuccess,
@@ -62,16 +60,14 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
         style,
         verbose,
     } = props
-    const { send, setIframeMounted, bridgeAppMounted, setBridgeAppMounted, url } = useStraddleBridge({ mode, appUrl })
+    const { send, setBridgeAppMounted, url, appUrl } = useStraddleBridge({ mode, appUrl: props.appUrl })
     const iframeMounted = useRef(false)
-
     useEffect(() => {
         let errorHandler: (errorEvent: ErrorEvent) => void
         let messageHandler: (event: MessageEvent<TMessage>) => void
-        if (open) {
+        if (open && !iframeMounted.current) {
             let iframe: HTMLIFrameElement | null = document.querySelector('#' + IFRAME_ID)
             if (!iframe) {
-                // iframeMounted.current = true
                 iframe = document.createElement('iframe')
                 iframe.setAttribute('src', `${url}?allowManualEntry=${allowManualEntry}`)
             }
@@ -102,6 +98,7 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
                     console.warn('ref passed to StraddleBridge is not a valid ref, reverting to appening to body. Ref passed:', ref.current)
                 }
                 document.getElementsByTagName('body')[0].appendChild(iframe)
+                iframeMounted.current = true
             }
             messageHandler = function (event: MessageEvent<TMessage>) {
                 // Make sure the message is from the expected origin
@@ -151,9 +148,8 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
                 }
             }
             window.addEventListener('message', messageHandler)
-        } else if (!open && iframeMounted) {
+        } else if (!open) {
             document.querySelector(`#${IFRAME_ID}`)?.remove()
-            setIframeMounted(false)
             iframeMounted.current = false
             setBridgeAppMounted(false)
         }

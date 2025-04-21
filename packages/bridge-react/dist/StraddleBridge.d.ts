@@ -6,11 +6,10 @@ export declare const useStraddleBridge: ({ mode, appUrl }: {
     appUrl?: string;
 }) => {
     send: (message: TMessage) => void;
-    iframeMounted: boolean;
-    setIframeMounted: import("react").Dispatch<import("react").SetStateAction<boolean>>;
     bridgeAppMounted: boolean;
     setBridgeAppMounted: import("react").Dispatch<import("react").SetStateAction<boolean>>;
     url: string;
+    appUrl: string;
 };
 type TypeStraddleBridgeProps = {
     mode?: TMode;
