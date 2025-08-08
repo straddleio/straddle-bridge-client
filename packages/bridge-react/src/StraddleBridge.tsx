@@ -1,4 +1,3 @@
-'use client'
 import { EBridgeMessageType, TMessage, TMode, TPaykeyResponse } from '@straddleio/bridge-core'
 import { CSSProperties, forwardRef, useEffect, useRef, useState } from 'react'
 export type { TMode } from '@straddleio/bridge-core'
@@ -64,7 +63,56 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
     const iframeMounted = useRef(false)
     useEffect(() => {
         let errorHandler: (errorEvent: ErrorEvent) => void
-        let messageHandler: (event: MessageEvent<TMessage>) => void
+        const messageHandler = function (event: MessageEvent<TMessage>) {
+            // Make sure the message is from the expected origin
+            // console.log('Message here', event.origin, appUrl, event.data)
+            if (event.origin === appUrl) {
+                verbose &&
+                    event.data.type !== EBridgeMessageType.CONSOLE &&
+                    console.log('Straddle Bridge React client, Message received from widget:', event.data.type, event)
+                const message = event.data
+                switch (message?.type) {
+                    case EBridgeMessageType.PING:
+                        break
+                    case EBridgeMessageType.MOUNTED:
+                        setBridgeAppMounted(true)
+                        send({ type: EBridgeMessageType.INITIALIZE, token })
+                        break
+                    case EBridgeMessageType.ON_CLOSE:
+                        onClose?.()
+                        setBridgeAppMounted(false)
+                        document.querySelector(`#${IFRAME_ID}`)?.remove()
+                        break
+                    case EBridgeMessageType.ON_SUCCESS_CTA_CLICKED:
+                        onSuccessCTAClicked?.()
+                        break
+                    case EBridgeMessageType.ON_PAYKEY:
+                        onSuccess?.(message.paykeyResponse)
+                        break
+                    case EBridgeMessageType.ON_MANUAL_ENTRY:
+                        onManualEntry?.()
+                        break
+                    case EBridgeMessageType.ON_RETRY:
+                        onRetry?.()
+                        break
+                    case EBridgeMessageType.CONSOLE:
+                        {
+                            const parsedPayload: any = message.payload.map((item: any) => {
+                                try {
+                                    return JSON.parse(item)
+                                } catch {
+                                    return item
+                                }
+                            })
+                            'method' in message && (console[message.method] as Function).apply(console, parsedPayload)
+                        }
+                        break
+                }
+            } else {
+                verbose && console.log('Message received from unknown origin:', event.origin, event.data)
+            }
+        }
+        window.addEventListener('message', messageHandler)
         if (open && !iframeMounted.current) {
             let iframe: HTMLIFrameElement | null = document.querySelector('#' + IFRAME_ID)
             if (!iframe) {
@@ -100,54 +148,6 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
                 document.getElementsByTagName('body')[0].appendChild(iframe)
                 iframeMounted.current = true
             }
-            messageHandler = function (event: MessageEvent<TMessage>) {
-                // Make sure the message is from the expected origin
-                // console.log('Message here', event.origin, appUrl, event.data)
-                if (event.origin === appUrl) {
-                    verbose &&
-                        event.data.type !== EBridgeMessageType.CONSOLE &&
-                        console.log('Straddle Bridge React client, Message received from widget:', event.data.type, event)
-                    const message = event.data
-                    switch (message?.type) {
-                        case EBridgeMessageType.PING:
-                            break
-                        case EBridgeMessageType.MOUNTED:
-                            setBridgeAppMounted(true)
-                            send({ type: EBridgeMessageType.INITIALIZE, token })
-                            break
-                        case EBridgeMessageType.ON_CLOSE:
-                            onClose?.()
-                            setBridgeAppMounted(false)
-                            document.querySelector(`#${IFRAME_ID}`)?.remove()
-                            break
-                        case EBridgeMessageType.ON_SUCCESS_CTA_CLICKED:
-                            onSuccessCTAClicked?.()
-                            break
-                        case EBridgeMessageType.ON_PAYKEY:
-                            onSuccess?.(message.paykeyResponse)
-                            break
-                        case EBridgeMessageType.ON_MANUAL_ENTRY:
-                            onManualEntry?.()
-                            break
-                        case EBridgeMessageType.ON_RETRY:
-                            onRetry?.()
-                            break
-                        case EBridgeMessageType.CONSOLE:
-                            {
-                                const parsedPayload: any = message.payload.map((item: any) => {
-                                    try {
-                                        return JSON.parse(item)
-                                    } catch {
-                                        return item
-                                    }
-                                })
-                                'method' in message && (console[message.method] as Function).apply(console, parsedPayload)
-                            }
-                            break
-                    }
-                }
-            }
-            window.addEventListener('message', messageHandler)
         } else if (!open) {
             document.querySelector(`#${IFRAME_ID}`)?.remove()
             iframeMounted.current = false
