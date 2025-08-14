@@ -19,6 +19,15 @@ export type TMessageConsole = {
     method: keyof typeof console;
     payload: any;
 };
+export type TErrorMessage = {
+    type: EBridgeMessageType.ERROR;
+    payload?: {
+        error_code?: string;
+        message?: string;
+    };
+};
+export type TMessage = TBaseMessage | TMessageInitialize | TPaykeyMessage | TMessageDebug | TMessageConsole | TErrorMessage;
+export type TMode = 'production' | 'sandbox';
 export type TPaykeyResponse = {
     meta: {
         api_request_id: string;
@@ -42,8 +51,6 @@ export type TPaykeyResponse = {
     };
     response_type: 'object';
 };
-export type TMessage = TBaseMessage | TMessageInitialize | TPaykeyMessage | TMessageDebug | TMessageConsole;
-export type TMode = 'production' | 'sandbox';
 export declare enum EBridgeMessageType {
     PING = "@straddleio/js-bridge/ping",
     ERROR = "@straddleio/js-bridge/error",
@@ -61,4 +68,14 @@ export declare enum EBridgeMessageType {
     DEBUG = "@straddleio/js-bridge/debug",
     CONSOLE = "@straddleio/js-bridge/console"
 }
+export type TOnLoadErrorParams = {
+    error_code: 'iframe_error';
+    error: ErrorEvent;
+    message: string;
+} | {
+    error_code: 'init_error';
+    message: any;
+    origin: string;
+};
+export type TOnSuccessParams = TPaykeyResponse;
 //# sourceMappingURL=types.d.ts.map

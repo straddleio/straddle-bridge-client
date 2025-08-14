@@ -1,9 +1,11 @@
-import { TMessage, TMode, TPaykeyResponse } from '@straddleio/bridge-core';
+import { TOnLoadErrorParams, TOnSuccessParams, TMessage, TMode } from '@straddleio/bridge-core';
 import { CSSProperties } from 'react';
 export type { TMode } from '@straddleio/bridge-core';
-export declare const useStraddleBridge: ({ mode, appUrl }: {
+export declare const useStraddleBridge: ({ mode, appUrl, allowManualEntry, verbose, }: {
     mode?: TMode;
     appUrl?: string;
+    allowManualEntry: boolean;
+    verbose?: boolean;
 }) => {
     send: (message: TMessage) => void;
     bridgeAppMounted: boolean;
@@ -16,10 +18,10 @@ type TypeStraddleBridgeProps = {
     appUrl?: string;
     open?: boolean;
     token: string;
-    onSuccess: (payload: TPaykeyResponse) => void;
+    onSuccess: (payload: TOnSuccessParams) => void;
     onSuccessCTAClicked?: () => void;
     onClose?: () => void;
-    onLoadError?: (err: ErrorEvent) => void;
+    onLoadError?: (err: TOnLoadErrorParams) => void;
     allowManualEntry?: boolean;
     onManualEntry?: () => void;
     onRetry?: () => void;

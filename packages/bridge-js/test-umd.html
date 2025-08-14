@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Straddle Bridge UMD Test</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background: #f5f5f5;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                background: white;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+            h1 {
+                color: #333;
+                margin-bottom: 20px;
+            }
+            .test-section {
+                margin: 20px 0;
+                padding: 20px;
+                border: 1px solid #e0e0e0;
+                border-radius: 4px;
+            }
+            button {
+                background: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                margin: 5px;
+            }
+            button:hover {
+                background: #0056b3;
+            }
+            .code-block {
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 4px;
+                font-family: 'Courier New', monospace;
+                margin: 10px 0;
+                overflow-x: auto;
+            }
+            .status {
+                margin: 10px 0;
+                padding: 10px;
+                border-radius: 4px;
+            }
+            .status.success {
+                background: #d4edda;
+                color: #155724;
+                border: 1px solid #c3e6cb;
+            }
+            .status.error {
+                background: #f8d7da;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
+            }
+            .status.info {
+                background: #d1ecf1;
+                color: #0c5460;
+                border: 1px solid #bee5eb;
+            }
+            .config-section {
+                margin: 20px 0;
+            }
+            input,
+            select {
+                padding: 8px;
+                margin: 5px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+            label {
+                display: inline-block;
+                width: 120px;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Straddle Bridge UMD Test</h1>
+
+            <div class="test-section">
+                <h2>Configuration</h2>
+                <div class="config-section">
+                    <label for="mode">Mode:</label>
+                    <select id="mode">
+                        <option value="sandbox">Sandbox</option>
+                        <option value="production">Production</option>
+                    </select>
+                </div>
+                <div class="config-section">
+                    <label for="token">Token:</label>
+                    <input type="text" id="token" placeholder="Enter your token" style="width: 300px" />
+                </div>
+                <div class="config-section">
+                    <label for="appUrl">App URL:</label>
+                    <input type="text" id="appUrl" placeholder="Leave empty for default" style="width: 300px" />
+                </div>
+            </div>
+
+            <div class="test-section">
+                <h2>Test Controls</h2>
+                <button onclick="testInit()">Initialize Bridge</button>
+                <button onclick="straddleBridge.show()">Show Bridge</button>
+                <button onclick="straddleBridge.hide()">Hide Bridge</button>
+                <button onclick="straddleBridge.remove()">Remove Bridge</button>
+                <button onclick="testDebug()">Enable Debug</button>
+                <button onclick="testSend()">Send Test Message</button>
+            </div>
+
+            <div class="test-section">
+                <h2>Status & Logs</h2>
+                <div id="status"></div>
+                <div id="logs"></div>
+            </div>
+
+            <div class="test-section">
+                <h2>Code Example</h2>
+                <div class="code-block">
+                    &lt;!-- Load in head --&gt; &lt;script src="https://your-cdn.com/bridge-js.umd.bundle.js"&gt;&lt;/script&gt; &lt;!-- Use in body or with
+                    DOMContentLoaded --&gt; &lt;script&gt; document.addEventListener('DOMContentLoaded', function() { // straddleBridge is guaranteed to be
+                    available here straddleBridge.init({ mode: 'sandbox', token: 'your-token', onSuccess: (payload) => { console.log('Success:', payload); },
+                    onClose: () => { console.log('Widget closed'); } }); }); &lt;/script&gt;
+                </div>
+            </div>
+        </div>
+
+        <!-- Load the UMD bundle -->
+        <script src="./dist/bridge-js.umd.bundle.js"></script>
+
+        <script>
+            // Global status and logging
+            function log(message, type = 'info') {
+                const logsDiv = document.getElementById('logs')
+                const timestamp = new Date().toLocaleTimeString()
+                const logEntry = document.createElement('div')
+                logEntry.className = `status ${type}`
+                logEntry.innerHTML = `[${timestamp}] ${message}`
+                logsDiv.appendChild(logEntry)
+                logsDiv.scrollTop = logsDiv.scrollHeight
+            }
+
+            function updateStatus(message, type = 'info') {
+                const statusDiv = document.getElementById('status')
+                statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`
+            }
+
+            // Test functions
+            function testInit() {
+                const mode = document.getElementById('mode').value
+                const token = document.getElementById('token').value
+                const appUrl = document.getElementById('appUrl').value
+
+                if (!token) {
+                    updateStatus('Please enter a token', 'error')
+                    return
+                }
+
+                try {
+                    const config = {
+                        mode: mode,
+                        token: token,
+                        onSuccess: (payload) => {
+                            log('Success callback triggered: ' + JSON.stringify(payload), 'success')
+                            updateStatus('Payment successful!', 'success')
+                        },
+                        onClose: () => {
+                            log('Close callback triggered', 'info')
+                            updateStatus('Widget closed', 'info')
+                        },
+                        onLoadError: (error) => {
+                            log('Load error: ' + error.message, 'error')
+                            updateStatus('Failed to load widget', 'error')
+                        },
+                        onSuccessCTAClicked: () => {
+                            log('Success CTA clicked', 'info')
+                        },
+                        onManualEntry: () => {
+                            log('Manual entry triggered', 'info')
+                        },
+                        onRetry: () => {
+                            log('Retry triggered', 'info')
+                        },
+                        verbose: true,
+                    }
+
+                    if (appUrl) {
+                        config.appUrl = appUrl
+                    }
+
+                    straddleBridge.init(config)
+                    log('Bridge initialized with config: ' + JSON.stringify(config), 'success')
+                    updateStatus('Bridge initialized successfully!', 'success')
+                } catch (error) {
+                    log('Error initializing bridge: ' + error.message, 'error')
+                    updateStatus('Failed to initialize bridge', 'error')
+                }
+            }
+
+            function testDebug() {
+                try {
+                    straddleBridge.debug.enable()
+                    log('Debug mode enabled', 'success')
+                } catch (error) {
+                    log('Error enabling debug: ' + error.message, 'error')
+                }
+            }
+
+            function testSend() {
+                try {
+                    straddleBridge.send({ type: 'TEST', message: 'Hello from UMD test!' })
+                    log('Test message sent', 'success')
+                } catch (error) {
+                    log('Error sending message: ' + error.message, 'error')
+                }
+            }
+
+            // Check if bridge is loaded
+            window.addEventListener('load', () => {
+                if (typeof straddleBridge !== 'undefined') {
+                    log('Straddle Bridge loaded successfully', 'success')
+                    updateStatus('Bridge ready for testing', 'success')
+                } else {
+                    log('Straddle Bridge not found', 'error')
+                    updateStatus('Bridge failed to load', 'error')
+                }
+            })
+        </script>
+    </body>
+</html>
