@@ -22,7 +22,7 @@ export default [
                 format: 'umd',
                 name: 'StraddleBridge',
                 globals: {
-                    '@straddleio/bridge-core': 'BridgeCore',
+                    '@straddlecom/bridge-core': 'BridgeCore',
                 },
                 sourcemap: true,
             },
@@ -40,7 +40,7 @@ export default [
             commonjs(),
             terser(),
         ],
-        external: ['@straddleio/bridge-core'],
+        external: ['@straddlecom/bridge-core'],
     },
     {
         input: 'dist/bridge-js.cjs.js',
@@ -106,7 +106,7 @@ export default [
         ],
     },
     {
-        input: 'node_modules/@straddleio/bridge-core/dist/index.js',
+        input: 'node_modules/@straddlecom/bridge-core/dist/index.js',
         output: {
             file: 'dist/bridge-core.umd.js',
             format: 'umd',

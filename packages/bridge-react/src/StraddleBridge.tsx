@@ -1,6 +1,6 @@
-import { EBridgeMessageType, TOnLoadErrorParams, TOnSuccessParams, TMessage, TMode } from '@straddleio/bridge-core'
+import { EBridgeMessageType, TOnLoadErrorParams, TOnSuccessParams, TMessage, TMode } from '@straddlecom/bridge-core'
 import { CSSProperties, forwardRef, useEffect, useRef, useState } from 'react'
-export type { TMode } from '@straddleio/bridge-core'
+export type { TMode } from '@straddlecom/bridge-core'
 
 const IFRAME_ID = 'Straddle-widget-iframe'
 const BRIDGE_CLIENT_LOG_LABEL_STYLE = 'color: #14b8a6; padding: 0px; border-radius: 24px; font-weight: 600;'
@@ -19,8 +19,8 @@ const warn = (...args: any[]) => console.warn('%c●%c', BRIDGE_CLIENT_LOG_LABEL
 const error = (...args: any[]) => console.error('%c●%c', BRIDGE_CLIENT_LOG_LABEL_STYLE, '', ...args)
 
 const appUrlDictionary: Record<TMode, string> = {
-    production: 'https://bridge.straddle.io',
-    sandbox: 'https://bridge-sandbox.straddle.io',
+    production: 'https://bridge.straddle.com',
+    sandbox: 'https://bridge-sandbox.straddle.com',
 }
 const getAppURLFromMode = (mode?: TMode) => appUrlDictionary[mode ?? 'production']
 

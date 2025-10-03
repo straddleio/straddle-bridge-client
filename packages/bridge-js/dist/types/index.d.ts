@@ -1,5 +1,5 @@
-import { TMessage, TMode } from '@straddleio/bridge-core';
-export type { TMode } from '@straddleio/bridge-core';
+import { TMessage, TMode } from '@straddlecom/bridge-core';
+export type { TMode } from '@straddlecom/bridge-core';
 type TOnLoadErrorParams = {
     error_code: 'iframe_error';
     error: ErrorEvent;
@@ -9,7 +9,7 @@ type TOnLoadErrorParams = {
     message: any;
     origin: string;
 };
-type TOnSuccessParams = import('@straddleio/bridge-core').TPaykeyResponse;
+type TOnSuccessParams = import('@straddlecom/bridge-core').TPaykeyResponse;
 export declare const straddleBridge: {
     getUrl: () => string;
     origin: string;

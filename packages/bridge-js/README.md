@@ -1,29 +1,29 @@
-# @straddleio/bridge-js
+# @straddlecom/bridge-js
 
 ## Overview
 
-`@straddleio/bridge-js` is a JavaScript library that provides a bridge to integrate Straddle's services into your web applications. It facilitates communication between your application and Straddle's platform through an iframe, allowing you to easily initialize and manage the Straddle widget.
+`@straddlecom/bridge-js` is a JavaScript library that provides a bridge to integrate Straddle's services into your web applications. It facilitates communication between your application and Straddle's platform through an iframe, allowing you to easily initialize and manage the Straddle widget.
 
 ## Installation
 
 Install the package using npm:
 
 ```bash
-npm install @straddleio/bridge-js
+npm install @straddlecom/bridge-js
 ```
 
 Or using yarn:
 
 ```bash
-yarn add @straddleio/bridge-js
+yarn add @straddlecom/bridge-js
 ```
 
 ## Usage
 
-Here's an example of how to use `@straddleio/bridge-js` in your application:
+Here's an example of how to use `@straddlecom/bridge-js` in your application:
 
 ```javascript
-import { straddleBridge } from '@straddleio/bridge-js'
+import { straddleBridge } from '@straddlecom/bridge-js'
 
 straddleBridge.init({
     mode: 'sandbox', // 'production' or 'sandbox'
@@ -81,8 +81,8 @@ straddleBridge.init({
 
 ## API Reference
 
-For integration with the Straddle widget, please refer to the [Straddle API Documentation](https://docs.straddle.io/guides/bridge/widget).
-For detailed API documentation, please refer to the [Straddle API Documentation](https://docs.straddle.io/api-reference/bridge/session).
+For integration with the Straddle widget, please refer to the [Straddle API Documentation](https://docs.straddle.com/guides/bridge/widget).
+For detailed API documentation, please refer to the [Straddle API Documentation](https://docs.straddle.com/api-reference/bridge/session).
 
 ### Troubleshooting
 

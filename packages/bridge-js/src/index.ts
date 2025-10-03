@@ -1,7 +1,7 @@
-import { EBridgeMessageType, TMessage, TMode } from '@straddleio/bridge-core'
-export type { TMode } from '@straddleio/bridge-core'
+import { EBridgeMessageType, TMessage, TMode } from '@straddlecom/bridge-core'
+export type { TMode } from '@straddlecom/bridge-core'
 type TOnLoadErrorParams = { error_code: 'iframe_error'; error: ErrorEvent; message: string } | { error_code: 'init_error'; message: any; origin: string }
-type TOnSuccessParams = import('@straddleio/bridge-core').TPaykeyResponse
+type TOnSuccessParams = import('@straddlecom/bridge-core').TPaykeyResponse
 
 const IFRAME_ID = 'Straddle-widget-iframe'
 const BRIDGE_CLIENT_LOG_LABEL_STYLE = 'color: #14b8a6; padding: 0px; border-radius: 24px; font-weight: 600;'
@@ -25,8 +25,8 @@ const getParentOrigin = () => [
 ]
 
 const appUrlDictionary: Record<TMode, string> = {
-    production: 'https://bridge.straddle.io',
-    sandbox: 'https://bridge-sandbox.straddle.io',
+    production: 'https://bridge.straddle.com',
+    sandbox: 'https://bridge-sandbox.straddle.com',
 }
 
 const getAppURLFromMode = (mode?: TMode) => appUrlDictionary[mode ?? 'production']
@@ -75,7 +75,7 @@ export const straddleBridge = {
         } = params
         appUrl = appUrl ?? getAppURLFromMode(mode)
         appUrl = appUrl.endsWith('/') ? appUrl.slice(0, -1) : appUrl
-        straddleBridge.origin = appUrl ?? 'https://bridge.straddle.io'
+        straddleBridge.origin = appUrl ?? 'https://bridge.straddle.com'
         straddleBridge.verbose = !!verbose
         verbose && log('init called')
         const iframe = document.createElement('iframe')
@@ -107,7 +107,8 @@ export const straddleBridge = {
                 if (event.origin === straddleBridge.origin) {
                     verbose && event.data.type !== EBridgeMessageType.CONSOLE && log('Message received from Bridge app:', event.data.type, event)
                     const message = event.data
-                    switch (message?.type) {
+                    const message_type = message?.type.replace('@straddleio/', '@straddlecom/')
+                    switch (message_type) {
                         case EBridgeMessageType.PING:
                             break
                         case EBridgeMessageType.MOUNTED:

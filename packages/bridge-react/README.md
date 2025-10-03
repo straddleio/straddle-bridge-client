@@ -1,31 +1,31 @@
-# @straddleio/bridge-react
+# @straddlecom/bridge-react
 
 ## Overview
 
-`@straddleio/bridge-react` is a React component that integrates Straddle's services into your React applications. It provides a seamless way to embed the Straddle widget and handle events within your React components.
+`@straddlecom/bridge-react` is a React component that integrates Straddle's services into your React applications. It provides a seamless way to embed the Straddle widget and handle events within your React components.
 
 ## Installation
 
 Install the package using npm:
 
 ```bash
-npm install @straddleio/bridge-react
+npm install @straddlecom/bridge-react
 ```
 
 Or using yarn:
 
 ```bash
-yarn add @straddleio/bridge-react
+yarn add @straddlecom/bridge-react
 ```
 
 ## Usage
 
-Here's an example of how to use `@straddleio/bridge-react` in your application:
+Here's an example of how to use `@straddlecom/bridge-react` in your application:
 
 ```tsx
 import React, { useState } from 'react'
-import { StraddleBridge } from '@straddleio/bridge-react'
-import { TOnSuccessParams, TOnLoadErrorParams } from '@straddleio/bridge-core'
+import { StraddleBridge } from '@straddlecom/bridge-react'
+import { TOnSuccessParams, TOnLoadErrorParams } from '@straddlecom/bridge-core'
 
 const StraddleBridgeController = () => {
     const [open, setOpen] = useState(true)
@@ -94,8 +94,8 @@ export default StraddleBridgeController
 
 ## API Reference
 
-For integration with the Straddle widget, please refer to the [Straddle API Documentation](https://docs.straddle.io/guides/bridge/widget).
-For detailed API documentation, please refer to the [Straddle API Documentation](https://docs.straddle.io/api-reference/bridge/session).
+For integration with the Straddle widget, please refer to the [Straddle API Documentation](https://docs.straddle.com/guides/bridge/widget).
+For detailed API documentation, please refer to the [Straddle API Documentation](https://docs.straddle.com/api-reference/bridge/session).
 
 ## Troubleshooting
 

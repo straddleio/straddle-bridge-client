@@ -1,6 +1,6 @@
 {
-    "name": "@straddleio/bridge-core",
-    "version": "0.2.1",
+    "name": "@straddlecom/bridge-core",
+    "version": "0.2.2",
     "private": false,
     "publishConfig": {
         "access": "public"

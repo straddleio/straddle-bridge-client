@@ -1,5 +1,5 @@
 {
-    "name": "@straddleio/bridge-js",
+    "name": "@straddlecom/bridge-js",
     "version": "0.2.0",
     "repository": {
         "type": "git",
@@ -65,6 +65,6 @@
         }
     },
     "dependencies": {
-        "@straddleio/bridge-core": "^0.2.1"
+        "@straddlecom/bridge-core": "^0.2.2"
     }
 }
