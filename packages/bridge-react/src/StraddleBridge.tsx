@@ -22,7 +22,7 @@ const appUrlDictionary: Record<TMode, string> = {
     production: 'https://bridge.straddle.com',
     sandbox: 'https://bridge-sandbox.straddle.com',
 }
-const getAppURLFromMode = (mode?: TMode) => appUrlDictionary[mode ?? 'production']
+const getAppURLFromMode = (mode?: TMode) => appUrlDictionary[mode ?? 'sandbox']
 
 export const useStraddleBridge = ({
     mode,
@@ -39,7 +39,6 @@ export const useStraddleBridge = ({
     appUrl = appUrl.endsWith('/') ? appUrl.slice(0, -1) : appUrl
     const [bridgeAppMounted, setBridgeAppMounted] = useState(false)
     const [parentOrigin, protocol] = getParentOrigin()
-    // const url = `${appUrl}/${parentOrigin}/?parentOriginProtocol=${protocol}&allowManualEntry=${allowManualEntry}`
     const url = `${appUrl}/?parentOriginURL=${parentOrigin}&parentOriginProtocol=${protocol}&allowManualEntry=${allowManualEntry}`
     const send = (message: TMessage) => {
         const iframe = document.getElementById(IFRAME_ID) as HTMLIFrameElement

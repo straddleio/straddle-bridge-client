@@ -29,7 +29,7 @@ const appUrlDictionary: Record<TMode, string> = {
     sandbox: 'https://bridge-sandbox.straddle.com',
 }
 
-const getAppURLFromMode = (mode?: TMode) => appUrlDictionary[mode ?? 'production']
+const getAppURLFromMode = (mode?: TMode) => appUrlDictionary[mode ?? 'sandbox']
 
 export const straddleBridge = {
     getUrl: () => {
