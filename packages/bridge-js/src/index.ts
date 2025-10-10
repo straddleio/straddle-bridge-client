@@ -103,12 +103,18 @@ export const straddleBridge = {
                 window.removeEventListener('message', straddleBridge.messageHandler)
             }
             straddleBridge.messageHandler = function (event: MessageEvent<TMessage>) {
+                const rawMessage = event.data as any
+                const message = {
+                    ...rawMessage,
+                    type: typeof rawMessage?.type === 'string' ? rawMessage.type.replace('@straddleio/', '@straddlecom/') : rawMessage?.type,
+                } as TMessage
+                if (message?.type?.includes('@straddlecom/') && event.origin !== straddleBridge.origin) {
+                    verbose && log('Message received from Bridge app but from unknown origin:', event.origin, event.data)
+                }
                 // Make sure the message is from the expected origin
                 if (event.origin === straddleBridge.origin) {
-                    verbose && event.data.type !== EBridgeMessageType.CONSOLE && log('Message received from Bridge app:', event.data.type, event)
-                    const message = event.data
-                    const message_type = message?.type.replace('@straddleio/', '@straddlecom/')
-                    switch (message_type) {
+                    verbose && message.type !== EBridgeMessageType.CONSOLE && log('Message received from Bridge app:', message.type, event)
+                    switch (message.type) {
                         case EBridgeMessageType.PING:
                             break
                         case EBridgeMessageType.MOUNTED:
