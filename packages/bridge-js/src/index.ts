@@ -1,7 +1,7 @@
-import { EBridgeMessageType, TMessage, TMode } from '@straddleio/bridge-core'
-export type { TMode } from '@straddleio/bridge-core'
+import { EBridgeMessageType, TMessage, TMode } from '@straddlecom/bridge-core'
+export type { TMode } from '@straddlecom/bridge-core'
 type TOnLoadErrorParams = { error_code: 'iframe_error'; error: ErrorEvent; message: string } | { error_code: 'init_error'; message: any; origin: string }
-type TOnSuccessParams = import('@straddleio/bridge-core').TPaykeyResponse
+type TOnSuccessParams = import('@straddlecom/bridge-core').TPaykeyResponse
 
 const IFRAME_ID = 'Straddle-widget-iframe'
 const BRIDGE_CLIENT_LOG_LABEL_STYLE = 'color: #14b8a6; padding: 0px; border-radius: 24px; font-weight: 600;'
@@ -25,11 +25,11 @@ const getParentOrigin = () => [
 ]
 
 const appUrlDictionary: Record<TMode, string> = {
-    production: 'https://bridge.straddle.io',
-    sandbox: 'https://bridge-sandbox.straddle.io',
+    production: 'https://bridge.straddle.com',
+    sandbox: 'https://bridge-sandbox.straddle.com',
 }
 
-const getAppURLFromMode = (mode?: TMode) => appUrlDictionary[mode ?? 'production']
+const getAppURLFromMode = (mode?: TMode) => appUrlDictionary[mode ?? 'sandbox']
 
 export const straddleBridge = {
     getUrl: () => {
@@ -75,7 +75,7 @@ export const straddleBridge = {
         } = params
         appUrl = appUrl ?? getAppURLFromMode(mode)
         appUrl = appUrl.endsWith('/') ? appUrl.slice(0, -1) : appUrl
-        straddleBridge.origin = appUrl ?? 'https://bridge.straddle.io'
+        straddleBridge.origin = appUrl ?? 'https://bridge.straddle.com'
         straddleBridge.verbose = !!verbose
         verbose && log('init called')
         const iframe = document.createElement('iframe')
@@ -103,11 +103,18 @@ export const straddleBridge = {
                 window.removeEventListener('message', straddleBridge.messageHandler)
             }
             straddleBridge.messageHandler = function (event: MessageEvent<TMessage>) {
+                const rawMessage = event.data as any
+                const message = {
+                    ...rawMessage,
+                    type: typeof rawMessage?.type === 'string' ? rawMessage.type.replace('@straddleio/', '@straddlecom/') : rawMessage?.type,
+                } as TMessage
+                if (message?.type?.includes('@straddlecom/') && event.origin !== straddleBridge.origin) {
+                    verbose && log('Message received from Bridge app but from unknown origin:', event.origin, event.data)
+                }
                 // Make sure the message is from the expected origin
                 if (event.origin === straddleBridge.origin) {
-                    verbose && event.data.type !== EBridgeMessageType.CONSOLE && log('Message received from Bridge app:', event.data.type, event)
-                    const message = event.data
-                    switch (message?.type) {
+                    verbose && message.type !== EBridgeMessageType.CONSOLE && log('Message received from Bridge app:', message.type, event)
+                    switch (message.type) {
                         case EBridgeMessageType.PING:
                             break
                         case EBridgeMessageType.MOUNTED:

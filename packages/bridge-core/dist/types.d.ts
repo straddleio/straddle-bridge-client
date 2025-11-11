@@ -52,21 +52,21 @@ export type TPaykeyResponse = {
     response_type: 'object';
 };
 export declare enum EBridgeMessageType {
-    PING = "@straddleio/js-bridge/ping",
-    ERROR = "@straddleio/js-bridge/error",
-    INITIALIZE = "@straddleio/js-bridge/initialize",
-    INITIALIZING = "@straddleio/js-bridge/initializing",
-    INITIALIZED = "@straddleio/js-bridge/initialized",
-    MOUNTED = "@straddleio/js-bridge/mounted",
-    ON_PAYKEY = "@straddleio/js-bridge/on-paykey",
-    ON_SUCCESS = "@straddleio/js-bridge/on-success",
-    ON_SUCCESS_CTA_CLICKED = "@straddleio/js-bridge/on-success-cta-clicked",
-    ON_CLOSE = "@straddleio/js-bridge/on-close",
-    ON_MANUAL_ENTRY = "@straddleio/js-bridge/on-manual-entry",
-    ON_RETRY = "@straddleio/js-bridge/on-retry",
-    TOKEN = "@straddleio/js-bridge/token",
-    DEBUG = "@straddleio/js-bridge/debug",
-    CONSOLE = "@straddleio/js-bridge/console"
+    PING = "@straddlecom/js-bridge/ping",
+    ERROR = "@straddlecom/js-bridge/error",
+    INITIALIZE = "@straddlecom/js-bridge/initialize",
+    INITIALIZING = "@straddlecom/js-bridge/initializing",
+    INITIALIZED = "@straddlecom/js-bridge/initialized",
+    MOUNTED = "@straddlecom/js-bridge/mounted",
+    ON_PAYKEY = "@straddlecom/js-bridge/on-paykey",
+    ON_SUCCESS = "@straddlecom/js-bridge/on-success",
+    ON_SUCCESS_CTA_CLICKED = "@straddlecom/js-bridge/on-success-cta-clicked",
+    ON_CLOSE = "@straddlecom/js-bridge/on-close",
+    ON_MANUAL_ENTRY = "@straddlecom/js-bridge/on-manual-entry",
+    ON_RETRY = "@straddlecom/js-bridge/on-retry",
+    TOKEN = "@straddlecom/js-bridge/token",
+    DEBUG = "@straddlecom/js-bridge/debug",
+    CONSOLE = "@straddlecom/js-bridge/console"
 }
 export type TOnLoadErrorParams = {
     error_code: 'iframe_error';
