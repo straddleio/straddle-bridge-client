@@ -2,16 +2,16 @@
 
 This repository contains the following packages for integrating Straddle's services:
 
--   [`@straddleio/bridge-core`](packages/bridge-core): Core utilities and types (not intended for direct use).
--   [`@straddleio/bridge-js`](packages/bridge-js): JavaScript library for non-React applications.
--   [`@straddleio/bridge-react`](packages/bridge-react): React component for seamless integration in React applications.
+-   [`@straddlecom/bridge-core`](packages/bridge-core): Core utilities and types (not intended for direct use).
+-   [`@straddlecom/bridge-js`](packages/bridge-js): JavaScript library for non-React applications.
+-   [`@straddlecom/bridge-react`](packages/bridge-react): React component for seamless integration in React applications.
 
 ## Getting Started
 
 Choose the package that best suits your application's needs:
 
--   For **JavaScript applications**, use `@straddleio/bridge-js`.
--   For **React applications**, use `@straddleio/bridge-react`.
+-   For **JavaScript applications**, use `@straddlecom/bridge-js`.
+-   For **React applications**, use `@straddlecom/bridge-react`.
 
 Refer to each package's README for detailed installation and usage instructions.
 

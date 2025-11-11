@@ -1,6 +1,6 @@
-import { TOnLoadErrorParams, TOnSuccessParams, TMessage, TMode } from '@straddleio/bridge-core';
+import { TOnLoadErrorParams, TOnSuccessParams, TMessage, TMode } from '@straddlecom/bridge-core';
 import { CSSProperties } from 'react';
-export type { TMode } from '@straddleio/bridge-core';
+export type { TMode } from '@straddlecom/bridge-core';
 export declare const useStraddleBridge: ({ mode, appUrl, allowManualEntry, verbose, }: {
     mode?: TMode;
     appUrl?: string;

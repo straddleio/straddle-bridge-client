@@ -1,6 +1,6 @@
-import { EBridgeMessageType, TOnLoadErrorParams, TOnSuccessParams, TMessage, TMode } from '@straddleio/bridge-core'
+import { EBridgeMessageType, TOnLoadErrorParams, TOnSuccessParams, TMessage, TMode } from '@straddlecom/bridge-core'
 import { CSSProperties, forwardRef, useEffect, useRef, useState } from 'react'
-export type { TMode } from '@straddleio/bridge-core'
+export type { TMode } from '@straddlecom/bridge-core'
 
 const IFRAME_ID = 'Straddle-widget-iframe'
 const BRIDGE_CLIENT_LOG_LABEL_STYLE = 'color: #14b8a6; padding: 0px; border-radius: 24px; font-weight: 600;'
@@ -19,10 +19,10 @@ const warn = (...args: any[]) => console.warn('%c●%c', BRIDGE_CLIENT_LOG_LABEL
 const error = (...args: any[]) => console.error('%c●%c', BRIDGE_CLIENT_LOG_LABEL_STYLE, '', ...args)
 
 const appUrlDictionary: Record<TMode, string> = {
-    production: 'https://bridge.straddle.io',
-    sandbox: 'https://bridge-sandbox.straddle.io',
+    production: 'https://bridge.straddle.com',
+    sandbox: 'https://bridge-sandbox.straddle.com',
 }
-const getAppURLFromMode = (mode?: TMode) => appUrlDictionary[mode ?? 'production']
+const getAppURLFromMode = (mode?: TMode) => appUrlDictionary[mode ?? 'sandbox']
 
 export const useStraddleBridge = ({
     mode,
@@ -39,7 +39,6 @@ export const useStraddleBridge = ({
     appUrl = appUrl.endsWith('/') ? appUrl.slice(0, -1) : appUrl
     const [bridgeAppMounted, setBridgeAppMounted] = useState(false)
     const [parentOrigin, protocol] = getParentOrigin()
-    // const url = `${appUrl}/${parentOrigin}/?parentOriginProtocol=${protocol}&allowManualEntry=${allowManualEntry}`
     const url = `${appUrl}/?parentOriginURL=${parentOrigin}&parentOriginProtocol=${protocol}&allowManualEntry=${allowManualEntry}`
     const send = (message: TMessage) => {
         const iframe = document.getElementById(IFRAME_ID) as HTMLIFrameElement
@@ -95,11 +94,18 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
     useEffect(() => {
         let errorHandler: (errorEvent: ErrorEvent) => void
         const messageHandler = function (event: MessageEvent<TMessage>) {
+            const rawMessage = event.data as any
+            const message = {
+                ...rawMessage,
+                type: typeof rawMessage?.type === 'string' ? rawMessage.type.replace('@straddleio/', '@straddlecom/') : rawMessage?.type,
+            } as TMessage
+            if (message?.type?.includes('@straddlecom/') && event.origin !== appUrl) {
+                verbose && log('Message received from Bridge app but from unknown origin:', event.origin, event.data)
+            }
             // Make sure the message is from the expected origin
             if (event.origin === appUrl) {
-                verbose && event.data.type !== EBridgeMessageType.CONSOLE && log('Message received from Bridge app:', event.data.type, event)
-                const message = event.data
-                switch (message?.type) {
+                verbose && message.type !== EBridgeMessageType.CONSOLE && log('Message received from Bridge app:', message.type, event)
+                switch (message.type) {
                     case EBridgeMessageType.PING:
                         break
                     case EBridgeMessageType.MOUNTED:

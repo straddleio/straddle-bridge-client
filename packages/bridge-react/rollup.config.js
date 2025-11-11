@@ -19,5 +19,5 @@ export default {
         },
     ],
     plugins: [peerDepsExternal(), resolve(), commonjs(), typescript(), terser()],
-    external: ['react', 'react-dom', '@straddleio/bridge-core'],
+    external: ['react', 'react-dom', '@straddlecom/bridge-core'],
 }
