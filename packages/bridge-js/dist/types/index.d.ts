@@ -10,11 +10,21 @@ type TOnLoadErrorParams = {
     origin: string;
 };
 type TOnSuccessParams = import('@straddlecom/bridge-core').TPaykeyResponse;
+declare global {
+    interface Window {
+        __STRADDLE_BRIDGE__?: {
+            mounted: boolean;
+            mounting: boolean;
+            owner?: symbol;
+        };
+    }
+}
 export declare const straddleBridge: {
     getUrl: () => string;
     origin: string;
     mounted: boolean;
     verbose: boolean;
+    owner: symbol | undefined;
     messageHandler: ((event: MessageEvent<TMessage>) => void) | undefined;
     iframeErrorHandler: ((errorEvent: ErrorEvent) => void) | undefined;
     init: (params: {

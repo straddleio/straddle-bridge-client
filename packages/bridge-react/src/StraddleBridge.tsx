@@ -57,6 +57,25 @@ const getParentOrigin = () => [
     typeof window !== 'undefined' && window.location.protocol.replace(':', ''),
 ]
 
+declare global {
+    interface Window {
+        __STRADDLE_BRIDGE__?: {
+            mounted: boolean
+            mounting: boolean
+            owner?: symbol
+        }
+    }
+}
+const getGlobalBridgeState = () => {
+    if (typeof window === 'undefined') {
+        return { mounted: false, mounting: false }
+    }
+    if (!window.__STRADDLE_BRIDGE__) {
+        window.__STRADDLE_BRIDGE__ = { mounted: false, mounting: false }
+    }
+    return window.__STRADDLE_BRIDGE__!
+}
+
 type TypeStraddleBridgeProps = {
     mode?: TMode
     appUrl?: string
@@ -174,7 +193,6 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
             }
         }
         window.addEventListener('message', messageHandler)
-        LOCAL_DEBUG && console.log('globalState', globalState)
         if (open) {
             globalState.mounting = true
             ownerTokenRef.current = Symbol('STRADDLE_BRIDGE_OWNER')
@@ -207,7 +225,7 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
                 ;(ref.current as HTMLElement).appendChild(iframe)
             } else {
                 if (ref && 'current' in ref && (!ref.current || !(ref.current instanceof Node))) {
-                    warn('ref passed to StraddleBridge is not a valid ref, reverting to appening to body. Ref passed:', ref.current)
+                    warn('ref passed to StraddleBridge is not a valid ref, reverting to appending to body. Ref passed:', ref.current)
                 }
                 document.getElementsByTagName('body')[0].appendChild(iframe)
             }
