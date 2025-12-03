@@ -13,6 +13,15 @@ export declare const useStraddleBridge: ({ mode, appUrl, allowManualEntry, verbo
     url: string;
     appUrl: string;
 };
+declare global {
+    interface Window {
+        __STRADDLE_BRIDGE__?: {
+            mounted: boolean;
+            mounting: boolean;
+            owner?: symbol;
+        };
+    }
+}
 type TypeStraddleBridgeProps = {
     mode?: TMode;
     appUrl?: string;

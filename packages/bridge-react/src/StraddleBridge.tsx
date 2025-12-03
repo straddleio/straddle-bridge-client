@@ -57,6 +57,25 @@ const getParentOrigin = () => [
     typeof window !== 'undefined' && window.location.protocol.replace(':', ''),
 ]
 
+declare global {
+    interface Window {
+        __STRADDLE_BRIDGE__?: {
+            mounted: boolean
+            mounting: boolean
+            owner?: symbol
+        }
+    }
+}
+const getGlobalBridgeState = () => {
+    if (typeof window === 'undefined') {
+        return { mounted: false, mounting: false }
+    }
+    if (!window.__STRADDLE_BRIDGE__) {
+        window.__STRADDLE_BRIDGE__ = { mounted: false, mounting: false }
+    }
+    return window.__STRADDLE_BRIDGE__!
+}
+
 type TypeStraddleBridgeProps = {
     mode?: TMode
     appUrl?: string
@@ -89,9 +108,16 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
         style,
         verbose,
     } = props
-    const { send, setBridgeAppMounted, url, appUrl } = useStraddleBridge({ mode, appUrl: props.appUrl, allowManualEntry, verbose })
-    const iframeMounted = useRef(false)
+    const { send, url, appUrl } = useStraddleBridge({ mode, appUrl: props.appUrl, allowManualEntry, verbose })
+    const ownerTokenRef = useRef<symbol | null>(null)
     useEffect(() => {
+        const globalState = getGlobalBridgeState()
+        // Prevent duplicate mounts: if another instance is already mounting or mounted,
+        // and this instance hasn't mounted its iframe yet, no-op.
+        if (open && (globalState.mounting || globalState.mounted)) {
+            verbose && warn('StraddleBridge already mounted; skipping duplicate mount.')
+            return () => {}
+        }
         let errorHandler: (errorEvent: ErrorEvent) => void
         const messageHandler = function (event: MessageEvent<TMessage>) {
             const rawMessage = event.data as any
@@ -109,17 +135,31 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
                     case EBridgeMessageType.PING:
                         break
                     case EBridgeMessageType.MOUNTED:
-                        setBridgeAppMounted(true)
                         send({ type: EBridgeMessageType.INITIALIZE, token })
                         break
                     case EBridgeMessageType.ON_CLOSE:
                         onClose?.()
-                        setBridgeAppMounted(false)
-                        document.querySelector(`#${IFRAME_ID}`)?.remove()
+                        {
+                            const gs = getGlobalBridgeState()
+                            if (gs.owner && ownerTokenRef.current && gs.owner === ownerTokenRef.current) {
+                                document.querySelector(`#${IFRAME_ID}`)?.remove()
+                                gs.mounting = false
+                                gs.mounted = false
+                                gs.owner = undefined
+                            }
+                        }
                         break
                     case EBridgeMessageType.ON_SUCCESS_CTA_CLICKED:
                         onSuccessCTAClicked?.()
-                        document.querySelector(`#${IFRAME_ID}`)?.remove()
+                        {
+                            const gs = getGlobalBridgeState()
+                            if (gs.owner && ownerTokenRef.current && gs.owner === ownerTokenRef.current) {
+                                document.querySelector(`#${IFRAME_ID}`)?.remove()
+                                gs.mounting = false
+                                gs.mounted = false
+                                gs.owner = undefined
+                            }
+                        }
                         break
                     case EBridgeMessageType.ON_PAYKEY:
                         onSuccess?.(message.paykeyResponse)
@@ -153,7 +193,10 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
             }
         }
         window.addEventListener('message', messageHandler)
-        if (open && !iframeMounted.current) {
+        if (open) {
+            globalState.mounting = true
+            ownerTokenRef.current = Symbol('STRADDLE_BRIDGE_OWNER')
+            globalState.owner = ownerTokenRef.current
             let iframe: HTMLIFrameElement | null = document.querySelector('#' + IFRAME_ID)
             if (!iframe) {
                 iframe = document.createElement('iframe')
@@ -182,20 +225,31 @@ export const StraddleBridge = forwardRef<HTMLElement, TypeStraddleBridgeProps & 
                 ;(ref.current as HTMLElement).appendChild(iframe)
             } else {
                 if (ref && 'current' in ref && (!ref.current || !(ref.current instanceof Node))) {
-                    warn('ref passed to StraddleBridge is not a valid ref, reverting to appening to body. Ref passed:', ref.current)
+                    warn('ref passed to StraddleBridge is not a valid ref, reverting to appending to body. Ref passed:', ref.current)
                 }
                 document.getElementsByTagName('body')[0].appendChild(iframe)
-                iframeMounted.current = true
             }
+            globalState.mounting = false
+            globalState.mounted = true
         } else if (!open) {
-            document.querySelector(`#${IFRAME_ID}`)?.remove()
-            iframeMounted.current = false
-            setBridgeAppMounted(false)
+            const gs = getGlobalBridgeState()
+            if (gs.owner && ownerTokenRef.current && gs.owner === ownerTokenRef.current) {
+                document.querySelector(`#${IFRAME_ID}`)?.remove()
+                gs.mounting = false
+                gs.mounted = false
+                gs.owner = undefined
+            }
         }
         return () => {
             const iframe: HTMLIFrameElement | null = document.querySelector('#' + IFRAME_ID)
             errorHandler && iframe && iframe.removeEventListener('error', errorHandler)
             messageHandler && window.removeEventListener('message', messageHandler)
+            const gs = getGlobalBridgeState()
+            if (gs.owner && ownerTokenRef.current && gs.owner === ownerTokenRef.current) {
+                gs.mounting = false
+                gs.mounted = false
+                gs.owner = undefined
+            }
         }
     }, [open])
     useEffect(() => {
