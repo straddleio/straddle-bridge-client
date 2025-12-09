@@ -31,6 +31,25 @@ const appUrlDictionary: Record<TMode, string> = {
 
 const getAppURLFromMode = (mode?: TMode) => appUrlDictionary[mode ?? 'sandbox']
 
+declare global {
+    interface Window {
+        __STRADDLE_BRIDGE__?: {
+            mounted: boolean
+            mounting: boolean
+            owner?: symbol
+        }
+    }
+}
+const getGlobalBridgeState = () => {
+    if (typeof window === 'undefined') {
+        return { mounted: false, mounting: false }
+    }
+    if (!window.__STRADDLE_BRIDGE__) {
+        window.__STRADDLE_BRIDGE__ = { mounted: false, mounting: false }
+    }
+    return window.__STRADDLE_BRIDGE__!
+}
+
 export const straddleBridge = {
     getUrl: () => {
         const [parentOrigin, protocol] = getParentOrigin()
@@ -39,6 +58,7 @@ export const straddleBridge = {
     origin: '',
     mounted: false,
     verbose: false,
+    owner: undefined as undefined | symbol,
     messageHandler: undefined as undefined | ((event: MessageEvent<TMessage>) => void),
     iframeErrorHandler: undefined as undefined | ((errorEvent: ErrorEvent) => void),
     init: function init(params: {
@@ -78,6 +98,14 @@ export const straddleBridge = {
         straddleBridge.origin = appUrl ?? 'https://bridge.straddle.com'
         straddleBridge.verbose = !!verbose
         verbose && log('init called')
+        const gs = getGlobalBridgeState()
+        if (gs.mounting || gs.mounted) {
+            verbose && warn('StraddleBridge already mounted; skipping duplicate mount.')
+            return
+        }
+        gs.mounting = true
+        straddleBridge.owner = Symbol('STRADDLE_BRIDGE_OWNER')
+        gs.owner = straddleBridge.owner
         const iframe = document.createElement('iframe')
         iframe.setAttribute('src', `${straddleBridge.getUrl()}&allowManualEntry=${allowManualEntry}`)
         straddleBridge.iframeErrorHandler = (errorEvent: ErrorEvent) => {
@@ -162,6 +190,8 @@ export const straddleBridge = {
             }
             window.addEventListener('message', straddleBridge.messageHandler)
         }
+        gs.mounting = false
+        gs.mounted = true
     },
     getIframe: () => document.getElementById(IFRAME_ID) as HTMLIFrameElement,
     show: () => {
@@ -178,6 +208,11 @@ export const straddleBridge = {
     },
     remove: () => {
         straddleBridge.verbose && console.log('straddleBridge.remove method called.')
+        const gs = getGlobalBridgeState()
+        if (!gs.owner || !straddleBridge.owner || gs.owner !== straddleBridge.owner) {
+            straddleBridge.verbose && console.log('remove called by non-owner; ignoring.')
+            return
+        }
         if (typeof window !== 'undefined' && straddleBridge.messageHandler) {
             window.removeEventListener('message', straddleBridge.messageHandler)
             straddleBridge.messageHandler = undefined
@@ -189,6 +224,10 @@ export const straddleBridge = {
         }
         iframe?.remove()
         straddleBridge.mounted = false
+        gs.mounted = false
+        gs.mounting = false
+        gs.owner = undefined
+        straddleBridge.owner = undefined
     },
     send: function send(message: TMessage) {
         const iframe = document.getElementById(IFRAME_ID) as HTMLIFrameElement
