@@ -66,6 +66,7 @@ straddleBridge.init({
 - **onClose**: (Optional) Callback function invoked when the Straddle widget is closed.
 - **onLoadError**: (Optional) Callback function invoked when there's an error loading the Straddle iframe, or in case of an invalid token.
 - **onManualEntry**: (Optional) Callback function invoked when the user clicks the manual entry button.
+- **allowManualEntry**: (Optional) Boolean indicating whether to allow the user to manually enter the paykey. Displays or hides the link to the manual entry page. Defaults to `true`.
 - **onRetry**: (Optional) Callback function invoked when the user clicks the retry button.
 - **targetRef**: (Optional) Reference to the HTML element where the Straddle widget should be appended. If not passed, the widget will be appended to the body.
 - **style**: (Optional) Custom styles for the iframe containing the Straddle widget. If passed, it should be an object with CSS properties, and will replace any default style. If not passed, the widget will fill the whole screen with a very high z-index.
