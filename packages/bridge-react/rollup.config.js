@@ -8,12 +8,18 @@ export default {
     input: 'src/index.ts',
     output: [
         {
-            file: 'dist/index.js',
+            file: 'dist/index.cjs',
             format: 'cjs',
             sourcemap: true,
         },
         {
             file: 'dist/index.esm.js',
+            format: 'esm',
+            sourcemap: true,
+        },
+        // Back-compat: keep 'dist/index.js' as ESM so deep imports still work
+        {
+            file: 'dist/index.js',
             format: 'esm',
             sourcemap: true,
         },

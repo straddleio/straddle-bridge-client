@@ -8,11 +8,6 @@ export default [
         input: 'src/index.ts',
         output: [
             {
-                file: 'dist/bridge-js.cjs.js',
-                format: 'cjs',
-                sourcemap: true,
-            },
-            {
                 file: 'dist/bridge-js.esm.js',
                 format: 'es',
                 sourcemap: true,
@@ -41,48 +36,6 @@ export default [
             terser(),
         ],
         external: ['@straddlecom/bridge-core'],
-    },
-    {
-        input: 'dist/bridge-js.cjs.js',
-        output: {
-            file: 'dist/bridge-js.cjs.bundle.js',
-            format: 'iife',
-            name: 'StraddleBridge',
-        },
-        plugins: [
-            typescript({
-                tsconfig: './tsconfig.json',
-                declaration: true,
-                declarationDir: './dist/types',
-            }),
-            resolve({
-                browser: true,
-                preferBuiltins: false,
-            }),
-            commonjs(),
-            terser(),
-        ],
-    },
-    {
-        input: 'dist/bridge-js.esm.js',
-        output: {
-            file: 'dist/bridge-js.esm.bundle.js',
-            format: 'iife',
-            name: 'StraddleBridge',
-        },
-        plugins: [
-            typescript({
-                tsconfig: './tsconfig.json',
-                declaration: true,
-                declarationDir: './dist/types',
-            }),
-            resolve({
-                browser: true,
-                preferBuiltins: false,
-            }),
-            commonjs(),
-            terser(),
-        ],
     },
     {
         input: 'src/index.ts',

@@ -6,8 +6,8 @@
         "url": "git+https://github.com/straddleio/straddle-bridge-client.git",
         "directory": "packages/bridge-js"
     },
-    "main": "dist/bridge-js.cjs-bundle.js",
-    "module": "dist/bridge-js.esm-bundle.js",
+    "main": "dist/bridge-js.esm.js",
+    "module": "dist/bridge-js.esm.js",
     "devDependencies": {
         "@rollup/plugin-commonjs": "^24.0.0",
         "@rollup/plugin-node-resolve": "^15.0.0",
@@ -21,16 +21,7 @@
         ".": {
             "types": "./dist/types/index.d.ts",
             "import": "./dist/bridge-js.esm.js",
-            "require": "./dist/bridge-js.cjs.js",
-            "default": "./dist/bridge-js.cjs.js"
-        },
-        "./dist/bridge-js.esm": {
-            "types": "./dist/types/index.d.ts",
-            "import": "./dist/bridge-js.esm.js"
-        },
-        "./dist/bridge-js.cjs": {
-            "types": "./dist/types/index.d.ts",
-            "require": "./dist/bridge-js.cjs.js"
+            "default": "./dist/bridge-js.esm.js"
         }
     },
     "browser": "dist/bridge-js.umd.bundle.js",
